@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:auto_size_text/auto_size_text.dart';
 
+import 'package:google_fonts/google_fonts.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -33,6 +35,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
         expression = expression.substring(0, expression.length - 1);
       }
       else if(buttonText == '='){
+
         result = expression;
         expressionFontSize = 48.0;
         resultFontSize = 58.0;
@@ -63,7 +66,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
 
 
   Widget buildButton(String buttonText, double buttonMeasurement, Color buttonColor, Color textColor){
-    return ElevatedButton(onPressed: () => buttonPressed(buttonText), onLongPress: () => buttonLongPress(buttonText), child: Container(height: buttonMeasurement, width: buttonMeasurement, alignment: Alignment.center, child: Text(buttonText, style: TextStyle(color: textColor, fontSize: 20),),), style: ElevatedButton.styleFrom(shape: const CircleBorder(), primary: buttonColor, onPrimary: textColor, elevation: 0.0));
+    return ElevatedButton(onPressed: () => buttonPressed(buttonText), onLongPress: () => buttonLongPress(buttonText), child: Container(height: buttonMeasurement, width: buttonMeasurement, alignment: Alignment.center, child: Text(buttonText, style: GoogleFonts.nunito(color: textColor, fontSize: 20)),), style: ElevatedButton.styleFrom(shape: const CircleBorder(), primary: buttonColor, onPrimary: textColor, elevation: 0.0));
   }
   @override
   Widget build(BuildContext context) {
@@ -77,8 +80,8 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children:  [
-                  Container(padding: const EdgeInsets.fromLTRB(0, 0, 30.0, 10.0), alignment: Alignment.centerRight,child: AutoSizeText(expression, style: TextStyle(fontSize: expressionFontSize, color: Colors.black87), maxLines: 2,)),
-                  Container(padding: const EdgeInsets.fromLTRB(0, 0, 30.0, 10.0),alignment: Alignment.centerRight,child: AutoSizeText(result, style: TextStyle(fontSize: resultFontSize, color: Colors.black), maxLines: 1,)),
+                  Container(padding: const EdgeInsets.fromLTRB(0, 0, 30.0, 10.0), alignment: Alignment.centerRight,child: AutoSizeText(expression, style: GoogleFonts.nunito(fontSize: expressionFontSize, color: Colors.black87), maxLines: 2,)),
+                  Container(padding: const EdgeInsets.fromLTRB(0, 0, 30.0, 10.0),alignment: Alignment.centerRight,child: AutoSizeText(result, style: GoogleFonts.nunito(fontSize: resultFontSize, color: Colors.black), maxLines: 1,)),
                 ],
               ),
               flex: 3,
