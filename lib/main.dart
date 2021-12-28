@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:auto_size_text/auto_size_text.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -26,11 +28,36 @@ class _CalculatorAppState extends State<CalculatorApp> {
   double resultFontSize = 48.0;
 
   buttonPressed(String buttonText){
+    setState(() {
+      if(buttonText.toUpperCase() == 'C'){
+        expression = expression.substring(0, expression.length - 1);
+      }
+      else if(buttonText == '='){
+        result = expression;
+        expressionFontSize = 48.0;
+        resultFontSize = 58.0;
+      }
 
+      else{
+        if(buttonText == '0'){
+          if(expression != ''){
+          expression += buttonText;
+          }
+        }
+        else{
+          expression += buttonText;
+        }
+      }
+    });
   }
 
   buttonLongPress(String buttonText){
-    
+    setState(() {
+      if(buttonText.toUpperCase() == 'C'){
+        expression = '';
+        result = '0';
+      }
+    });
   }
 
 
@@ -50,8 +77,8 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children:  [
-                  Container(alignment: Alignment.centerRight,child: Text(expression, style: TextStyle(fontSize: expressionFontSize, color: Colors.black87),)),
-                  Container(padding: const EdgeInsets.fromLTRB(0, 0, 0, 10.0),alignment: Alignment.centerRight,child: Text(result, style: TextStyle(fontSize: resultFontSize, color: Colors.black),)),
+                  Container(padding: const EdgeInsets.fromLTRB(0, 0, 30.0, 10.0), alignment: Alignment.centerRight,child: AutoSizeText(expression, style: TextStyle(fontSize: expressionFontSize, color: Colors.black87), maxLines: 2,)),
+                  Container(padding: const EdgeInsets.fromLTRB(0, 0, 30.0, 10.0),alignment: Alignment.centerRight,child: AutoSizeText(result, style: TextStyle(fontSize: resultFontSize, color: Colors.black), maxLines: 1,)),
                 ],
               ),
               flex: 3,
