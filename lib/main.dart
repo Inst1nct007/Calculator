@@ -24,14 +24,19 @@ class _CalculatorAppState extends State<CalculatorApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Calculator'),
+          title: const Text('Calculator'),
           centerTitle: true,
         ),
         body: Column(
           children: [
             Expanded(
-              child: Container(
-                color: Colors.redAccent,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children:  [
+                  Container(alignment: Alignment.centerRight,child: const Text('0', style: TextStyle(fontSize: 48),)),
+                  Container(alignment: Alignment.centerRight,child: const Text('1', style: TextStyle(fontSize: 48),)),
+                ],
               ),
               flex: 4,
             ),
