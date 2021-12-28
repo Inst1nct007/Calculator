@@ -20,8 +20,23 @@ class CalculatorApp extends StatefulWidget {
 
 class _CalculatorAppState extends State<CalculatorApp> {
 
+  String expression = '';
+  String result = '0';
+  double expressionFontSize = 58.0;
+  double resultFontSize = 48.0;
+
+  buttonPressed(String buttonText){
+
+  }
+
+  buttonLongPress(String buttonText){
+    
+  }
+
+
+
   Widget buildButton(String buttonText, double buttonMeasurement, Color buttonColor, Color textColor){
-    return ElevatedButton(onPressed: (){}, child: Container(height: buttonMeasurement, width: buttonMeasurement, alignment: Alignment.center, child: Text(buttonText, style: TextStyle(color: textColor, fontSize: 20),),), style: ElevatedButton.styleFrom(shape: const CircleBorder(), primary: buttonColor, onPrimary: textColor, elevation: 0.0));
+    return ElevatedButton(onPressed: () => buttonPressed(buttonText), onLongPress: () => buttonLongPress(buttonText), child: Container(height: buttonMeasurement, width: buttonMeasurement, alignment: Alignment.center, child: Text(buttonText, style: TextStyle(color: textColor, fontSize: 20),),), style: ElevatedButton.styleFrom(shape: const CircleBorder(), primary: buttonColor, onPrimary: textColor, elevation: 0.0));
   }
   @override
   Widget build(BuildContext context) {
@@ -35,11 +50,11 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children:  [
-                  Container(alignment: Alignment.centerRight,child: const Text('0', style: TextStyle(fontSize: 48, color: Colors.black87),)),
-                  Container(padding: const EdgeInsets.fromLTRB(0, 0, 0, 10.0),alignment: Alignment.centerRight,child: const Text('1', style: TextStyle(fontSize: 58, color: Colors.black),)),
+                  Container(alignment: Alignment.centerRight,child: Text(expression, style: TextStyle(fontSize: expressionFontSize, color: Colors.black87),)),
+                  Container(padding: const EdgeInsets.fromLTRB(0, 0, 0, 10.0),alignment: Alignment.centerRight,child: Text(result, style: TextStyle(fontSize: resultFontSize, color: Colors.black),)),
                 ],
               ),
-              flex: 4,
+              flex: 3,
             ),
             Expanded(
               child: Column(
@@ -93,9 +108,21 @@ class _CalculatorAppState extends State<CalculatorApp> {
                       ],
                     ),
                   ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(child: buildButton('0', 65, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('+/-', 65, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('%', 65, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('🌟', 65, Colors.white10, Colors.blueAccent), flex: 1,),
+                      ],
+                    ),
+                  ),
                 ],
               ),
-              flex: 5,
+              flex: 6,
             )
           ],
         ),
