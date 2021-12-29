@@ -41,6 +41,15 @@ class _CalculatorAppState extends State<CalculatorApp> {
         resultFontSize = 58.0;
       }
 
+      else if(buttonText == '+/-'){
+        if(expression[0] != '-'){
+          expression = '-' + expression;
+        }
+        else{
+          expression = expression.substring(1, expression.length);
+        }
+      }
+
       else{
         if(buttonText == '0'){
           if(expression != ''){
@@ -71,6 +80,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Calculator',
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Column(
@@ -95,10 +105,10 @@ class _CalculatorAppState extends State<CalculatorApp> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(child: buildButton('C', 65, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('/', 65, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('x', 65, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('=', 65, Colors.blueAccent, Colors.white), flex: 1,),
+                        Expanded(child: buildButton('C', 70, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('/', 70, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('x', 70, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('=', 70, Colors.blueAccent, Colors.white), flex: 1,),
                       ],
                     ),
                   ),
@@ -107,10 +117,10 @@ class _CalculatorAppState extends State<CalculatorApp> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(child: buildButton('7', 65, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('8', 65, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('9', 65, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('+', 65, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('7', 70, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('8', 70, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('9', 70, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('+', 70, Colors.white10, Colors.blueAccent), flex: 1,),
                       ],
                     ),
                   ),
@@ -119,10 +129,10 @@ class _CalculatorAppState extends State<CalculatorApp> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(child: buildButton('4', 65, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('5', 65, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('6', 65, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('-', 65, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('4', 70, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('5', 70, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('6', 70, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('-', 70, Colors.white10, Colors.blueAccent), flex: 1,),
                       ],
                     ),
                   ),
@@ -131,10 +141,10 @@ class _CalculatorAppState extends State<CalculatorApp> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(child: buildButton('1', 65, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('2', 65, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('3', 65, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('.', 65, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('1', 70, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('2', 70, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('3', 70, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('.', 70, Colors.white10, Colors.blueAccent), flex: 1,),
                       ],
                     ),
                   ),
@@ -143,10 +153,10 @@ class _CalculatorAppState extends State<CalculatorApp> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(child: buildButton('0', 65, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('+/-', 65, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('%', 65, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('🌟', 65, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('0', 70, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('+/-', 70, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('^', 70, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('🌟', 70, Colors.white10, Colors.blueAccent), flex: 1,),
                       ],
                     ),
                   ),
