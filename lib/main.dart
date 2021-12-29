@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -26,17 +28,41 @@ class _CalculatorAppState extends State<CalculatorApp> {
 
   String expression = '';
   String result = '0';
+  var checkInteger;
   double expressionFontSize = 58.0;
   double resultFontSize = 48.0;
+  var numbers;
+  var operation;
 
   buttonPressed(String buttonText){
     setState(() {
       if(buttonText.toUpperCase() == 'C'){
+        try{
         expression = expression.substring(0, expression.length - 1);
+        }
+        catch(e){
+          null;
+        }
       }
       else if(buttonText == '='){
+        numbers = expression.split('^');
+        try{
+          result = pow(double.parse(numbers[0]), double.parse(numbers[1])).toString();
+        }
+        catch(e){
+          result = expression;
+        }
 
-        result = expression;
+        checkInteger = result.split('.');
+          while(checkInteger[1].toString()[checkInteger[1].toString().length - 1] == '0' && checkInteger[1].toString().length > 1){
+            checkInteger[1] = checkInteger[1].toString().substring(0, checkInteger[1].toString().length - 1);
+          }
+          if(checkInteger[1] != '0'){
+            result = checkInteger[0] + '.' + checkInteger[1];
+          }
+          else{
+            result = checkInteger[0];
+          }
         expressionFontSize = 48.0;
         resultFontSize = 58.0;
       }
