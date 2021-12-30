@@ -51,6 +51,11 @@ class _CalculatorAppState extends State<CalculatorApp> {
           numbers = expression.split(re);
           print(numbers);
           result = numbers[0];
+          re = RegExp('[0-9]+');
+          operators = expression.split(re);
+          operators.removeAt(0);
+          operators.removeAt(operators.length - 1);
+          print(operators);
         }
         catch(e){
           result = ':(';
