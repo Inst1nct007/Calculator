@@ -32,7 +32,8 @@ class _CalculatorAppState extends State<CalculatorApp> {
   double expressionFontSize = 58.0;
   double resultFontSize = 48.0;
   var numbers;
-  var operation;
+  var operators;
+  var re;
 
   buttonPressed(String buttonText){
     setState(() {
@@ -45,15 +46,17 @@ class _CalculatorAppState extends State<CalculatorApp> {
         }
       }
       else if(buttonText == '='){
-        numbers = expression.split('^');
         try{
-          result = pow(double.parse(numbers[0]), double.parse(numbers[1])).toString();
+          re = RegExp('[^0-9]');
+          numbers = expression.split(re);
+          print(numbers);
+          result = numbers[0];
         }
         catch(e){
-          result = expression;
+          result = ':(';
         }
-
-        checkInteger = result.split('.');
+        try{
+          checkInteger = result.split('.');
           while(checkInteger[1].toString()[checkInteger[1].toString().length - 1] == '0' && checkInteger[1].toString().length > 1){
             checkInteger[1] = checkInteger[1].toString().substring(0, checkInteger[1].toString().length - 1);
           }
@@ -63,6 +66,10 @@ class _CalculatorAppState extends State<CalculatorApp> {
           else{
             result = checkInteger[0];
           }
+        }
+        catch(e){
+          null;
+        }
         expressionFontSize = 48.0;
         resultFontSize = 58.0;
       }
