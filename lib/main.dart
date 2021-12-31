@@ -126,7 +126,10 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 i--;
               }
             }
-            result = numbers[0];
+          }
+          result = numbers[0];
+          if(result[0] == '0' && result[1] != '.'){
+            result = result.substring(1, result.length);
           }
         }
         catch(e){
@@ -186,6 +189,113 @@ class _CalculatorAppState extends State<CalculatorApp> {
       if(buttonText.toUpperCase() == 'C'){
         expression = '0';
         result = '';
+      }
+      else if(buttonText == '='){
+        try{
+          re = RegExp('[^0-9]');
+          numbers = expression.split(re);
+          result = numbers[0];
+          re = RegExp('[0-9]*');
+          operators = expression.split(re);
+          operators.removeAt(0);
+          operators.removeAt(operators.length - 1);
+
+          while(numbers.length != 1){
+
+            for(int i = 0; i < operators.length; i++){
+              if(operators[i] == '.'){
+                temp = double.parse(numbers[i]) + double.parse(numbers[i+1])/pow(10, numbers[i+1].length);
+                numbers[i] = temp.toString();
+                numbers.removeAt(i+1);
+                if(operators.length > 0){
+                  operators.removeAt(i);
+                }
+              }
+            }
+
+            for(int i = 0; i < operators.length; i++){
+              if(operators[i] == '^'){
+                temp = pow(double.parse(numbers[i]), double.parse(numbers[i+1])) as double;
+                numbers[i] = temp.toString();
+                result = temp.toString();
+                numbers.removeAt(i+1);
+                if(operators.length > 0){
+                  operators.removeAt(i);
+                }
+                i--;
+              }
+            }
+
+            for(int i = 0; i < operators.length; i++){
+              if(operators[i] == 'x'){
+                temp = double.parse(numbers[i]) * double.parse(numbers[i+1]);
+                numbers[i] = temp.toString();
+                numbers.removeAt(i+1);
+                if(operators.length > 1){
+                  operators.removeAt(i);
+                }
+                i--;
+              }
+            }
+            for(int i = 0; i < operators.length; i++){
+              if(operators[i] == '/'){
+                temp = double.parse(numbers[i]) / double.parse(numbers[i+1]);
+                numbers[i] = temp.toString();
+                numbers.removeAt(i+1);
+                i--;
+                if(operators.length > 0){
+                  operators.removeAt(i);
+                }
+              }
+            }
+            for(int i = 0; i < operators.length; i++){
+              if(operators[i] == '+'){
+                temp = double.parse(numbers[i]) + double.parse(numbers[i+1]);
+                numbers[i] = temp.toString();
+                numbers.removeAt(i+1);
+                if(operators.length > 0){
+                  operators.removeAt(i);
+                }
+                i--;
+              }
+            }
+            for(int i = 0; i < operators.length; i++){
+              if(operators[i] == '-'){
+                temp = double.parse(numbers[i]) - double.parse(numbers[i+1]);
+                numbers[i] = temp.toString();
+                numbers.removeAt(i+1);
+                if(operators.length > 0){
+                  operators.removeAt(i);
+                }
+                i--;
+              }
+            }
+          }
+          result = numbers[0];
+          if(result[0] == '0' && result[1] != '.'){
+            result = result.substring(1, result.length);
+          }
+          try{
+            checkInteger = result.split('.');
+            while(checkInteger[1].toString()[checkInteger[1].toString().length - 1] == '0' && checkInteger[1].toString().length > 1){
+              checkInteger[1] = checkInteger[1].toString().substring(0, checkInteger[1].toString().length - 1);
+            }
+            if(checkInteger[1] != '0'){
+              result = checkInteger[0] + '.' + checkInteger[1];
+            }
+            else{
+              result = checkInteger[0];
+            }
+          }
+          catch(e){
+            null;
+          }
+          expression = '0' + result;
+          result = '';
+        }
+        catch(e){
+          result = ':(';
+        }
       }
     });
   }
