@@ -40,7 +40,9 @@ class _CalculatorAppState extends State<CalculatorApp> {
     setState(() {
       if(buttonText.toUpperCase() == 'C'){
         try{
-        expression = expression.substring(0, expression.length - 1);
+          if(expression != '0') {
+            expression = expression.substring(0, expression.length - 1);
+          }
         }
         catch(e){
           null;
