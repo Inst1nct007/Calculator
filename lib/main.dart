@@ -28,7 +28,6 @@ class _CalculatorAppState extends State<CalculatorApp> {
 
   String expression = '0';
   String result = '';
-  var checkInteger = [];
   double expressionFontSize = 58.0;
   double resultFontSize = 48.0;
   var numbers = [];
@@ -83,8 +82,6 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 i--;
               }
             }
-            print(numbers);
-            print(operators);
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == 'x'){
                 temp = double.parse(numbers[i]) * double.parse(numbers[i+1]);
@@ -96,8 +93,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 i--;
               }
             }
-            print(numbers);
-            print(operators);
+
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '/'){
                 temp = double.parse(numbers[i]) / double.parse(numbers[i+1]);
@@ -109,8 +105,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 i--;
               }
             }
-            print(numbers);
-            print(operators);
+
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '+'){
                 temp = double.parse(numbers[i]) + double.parse(numbers[i+1]);
@@ -122,8 +117,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 i--;
               }
             }
-            print(numbers);
-            print(operators);
+
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '-'){
                   temp = double.parse(numbers[i]) - double.parse(numbers[i+1]);
@@ -136,8 +130,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
               }
             }
           }
-          print(numbers);
-          print(operators);
+
           result = numbers[0];
           if(result[0] == '0' && result[1] != '.'){
             result = result.substring(1, result.length);
@@ -149,16 +142,19 @@ class _CalculatorAppState extends State<CalculatorApp> {
 
 
         try{
-          checkInteger = result.split('.');
-          while(checkInteger[1].toString()[checkInteger[1].toString().length - 1] == '0' && checkInteger[1].toString().length > 1){
-            checkInteger[1] = checkInteger[1].toString().substring(0, checkInteger[1].toString().length - 1);
+          numbers.addAll(result.split('.'));
+
+          while(numbers[2].toString()[numbers[2].toString().length - 1] == '0' && numbers[2].toString().length > 1){
+            numbers[2] = numbers[2].toString().substring(0, numbers[2].toString().length - 1);
           }
-          if(checkInteger[1] != '0'){
-            result = checkInteger[0] + '.' + checkInteger[1];
+          if(numbers[2] != '0'){
+            result = numbers[1] + '.' + numbers[2];
           }
           else{
-            result = checkInteger[0];
+            result = numbers[1];
           }
+          numbers.removeAt(2);
+          numbers.removeAt(1);
         }
         catch(e){
           null;
@@ -285,16 +281,19 @@ class _CalculatorAppState extends State<CalculatorApp> {
             result = result.substring(1, result.length);
           }
           try{
-            checkInteger = result.split('.');
-            while(checkInteger[1].toString()[checkInteger[1].toString().length - 1] == '0' && checkInteger[1].toString().length > 1){
-              checkInteger[1] = checkInteger[1].toString().substring(0, checkInteger[1].toString().length - 1);
+            numbers.addAll(result.split('.'));
+
+            while(numbers[2].toString()[numbers[2].toString().length - 1] == '0' && numbers[2].toString().length > 1){
+              numbers[2] = numbers[2].toString().substring(0, numbers[2].toString().length - 1);
             }
-            if(checkInteger[1] != '0'){
-              result = checkInteger[0] + '.' + checkInteger[1];
+            if(numbers[2] != '0'){
+              result = numbers[1] + '.' + numbers[2];
             }
             else{
-              result = checkInteger[0];
+              result = numbers[1];
             }
+            numbers.removeAt(2);
+            numbers.removeAt(1);
           }
           catch(e){
             null;
