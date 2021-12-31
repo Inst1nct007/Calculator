@@ -55,33 +55,37 @@ class _CalculatorAppState extends State<CalculatorApp> {
           operators = expression.split(re);
           operators.removeAt(0);
           operators.removeAt(operators.length - 1);
-          print(numbers);
-          print(operators);
 
           while(numbers.length != 1){
+            print(numbers);
+            print(operators);
+            print(operators.length);
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '.'){
                 temp = double.parse(numbers[i]) + double.parse(numbers[i+1])/pow(10, numbers[i+1].length);
                 numbers[i] = temp.toString();
-                if(operators.length > 1){
+                if(operators.length > 0){
                   operators.removeAt(i);
                 }
                 numbers.removeAt(i+1);
               }
+
             }
+            print(numbers);
+            print(operators);
+            print(operators.length);
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '^'){
                 temp = pow(double.parse(numbers[i]), double.parse(numbers[i+1])) as double;
                 numbers[i] = temp.toString();
                 result = temp.toString();
-                if(operators.length > 1){
+                if(operators.length > 0){
                   operators.removeAt(i);
                 }
                 numbers.removeAt(i+1);
+                i--;
               }
             }
-            print(numbers);
-            print(operators);
 
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == 'x'){
@@ -91,47 +95,53 @@ class _CalculatorAppState extends State<CalculatorApp> {
                   operators.removeAt(i);
                 }
                 numbers.removeAt(i+1);
+                i--;
               }
             }
-            print(numbers);
-            print(operators);
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '/'){
                 temp = double.parse(numbers[i]) / double.parse(numbers[i+1]);
                 numbers[i] = temp.toString();
-                if(operators.length > 1){
+                if(operators.length > 0){
                   operators.removeAt(i);
                 }
                 numbers.removeAt(i+1);
+                i--;
               }
             }
-            print(numbers);
-            print(operators);
+
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '+'){
                 temp = double.parse(numbers[i]) + double.parse(numbers[i+1]);
                 numbers[i] = temp.toString();
-                if(operators.length > 1){
+                if(operators.length > 0){
                   operators.removeAt(i);
                 }
                 numbers.removeAt(i+1);
+                i--;
               }
             }
             print(numbers);
             print(operators);
+            print(operators.length);
             for(int i = 0; i < operators.length; i++){
-              if(operators[i] == '-'){
+              if(operators[i] == '-' && numbers[0] != ''){
                 temp = double.parse(numbers[i]) - double.parse(numbers[i+1]);
                 numbers[i] = temp.toString();
                 if(operators.length > 1){
                   operators.removeAt(i);
                 }
-                numbers.removeAt(i+1);
+                i--;
               }
+              else{
+                numbers[0] = -1 * double.parse(numbers[1]);
+              }
+              numbers.removeAt(i+1);
             }
             result = numbers[0];
             print(numbers);
             print(operators);
+            print(operators.length);
           }
         }
         catch(e){
@@ -172,6 +182,9 @@ class _CalculatorAppState extends State<CalculatorApp> {
           if(expression != ''){
           expression += buttonText;
           }
+        }
+        else if(buttonText == '🌟'){
+
         }
         else{
           expression += buttonText;
