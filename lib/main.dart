@@ -115,9 +115,6 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 i--;
               }
             }
-            print(numbers);
-            print(operators);
-            print(operators.length);
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '-'){
                   temp = double.parse(numbers[i]) - double.parse(numbers[i+1]);
@@ -130,10 +127,6 @@ class _CalculatorAppState extends State<CalculatorApp> {
               }
             }
             result = numbers[0];
-            print(result);
-            print(numbers);
-            print(operators);
-            print(operators.length);
           }
         }
         catch(e){
