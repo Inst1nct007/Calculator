@@ -28,11 +28,11 @@ class _CalculatorAppState extends State<CalculatorApp> {
 
   String expression = '0';
   String result = '';
-  var checkInteger;
+  var checkInteger = [];
   double expressionFontSize = 58.0;
   double resultFontSize = 48.0;
-  var numbers;
-  var operators;
+  var numbers = [];
+  var operators = [];
   var re;
   double temp = 0.0;
 
@@ -83,7 +83,8 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 i--;
               }
             }
-
+            print(numbers);
+            print(operators);
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == 'x'){
                 temp = double.parse(numbers[i]) * double.parse(numbers[i+1]);
@@ -95,17 +96,21 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 i--;
               }
             }
+            print(numbers);
+            print(operators);
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '/'){
                 temp = double.parse(numbers[i]) / double.parse(numbers[i+1]);
                 numbers[i] = temp.toString();
                 numbers.removeAt(i+1);
-                i--;
                 if(operators.length > 0){
                   operators.removeAt(i);
                 }
+                i--;
               }
             }
+            print(numbers);
+            print(operators);
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '+'){
                 temp = double.parse(numbers[i]) + double.parse(numbers[i+1]);
@@ -117,6 +122,8 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 i--;
               }
             }
+            print(numbers);
+            print(operators);
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '-'){
                   temp = double.parse(numbers[i]) - double.parse(numbers[i+1]);
@@ -129,6 +136,8 @@ class _CalculatorAppState extends State<CalculatorApp> {
               }
             }
           }
+          print(numbers);
+          print(operators);
           result = numbers[0];
           if(result[0] == '0' && result[1] != '.'){
             result = result.substring(1, result.length);
@@ -160,10 +169,8 @@ class _CalculatorAppState extends State<CalculatorApp> {
 
       else if(buttonText == '+/-'){
         try{
-          checkInteger[0] = -1 * double.parse(result);
-          result = checkInteger[0];
-          print(checkInteger[0]);
-          print(result);
+          numbers[0] = -1 * double.parse(result);
+          result = numbers[0];
         }
         catch(e){
           null;
@@ -244,10 +251,10 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 temp = double.parse(numbers[i]) / double.parse(numbers[i+1]);
                 numbers[i] = temp.toString();
                 numbers.removeAt(i+1);
-                i--;
                 if(operators.length > 0){
                   operators.removeAt(i);
                 }
+                i--;
               }
             }
             for(int i = 0; i < operators.length; i++){
