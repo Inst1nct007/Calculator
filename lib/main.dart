@@ -26,8 +26,8 @@ class CalculatorApp extends StatefulWidget {
 
 class _CalculatorAppState extends State<CalculatorApp> {
 
-  String expression = '';
-  String result = '0';
+  String expression = '0';
+  String result = '';
   var checkInteger;
   double expressionFontSize = 58.0;
   double resultFontSize = 48.0;
@@ -57,32 +57,27 @@ class _CalculatorAppState extends State<CalculatorApp> {
           operators.removeAt(operators.length - 1);
 
           while(numbers.length != 1){
-            print(numbers);
-            print(operators);
-            print(operators.length);
+
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '.'){
                 temp = double.parse(numbers[i]) + double.parse(numbers[i+1])/pow(10, numbers[i+1].length);
                 numbers[i] = temp.toString();
+                numbers.removeAt(i+1);
                 if(operators.length > 0){
                   operators.removeAt(i);
                 }
-                numbers.removeAt(i+1);
               }
-
             }
-            print(numbers);
-            print(operators);
-            print(operators.length);
+
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '^'){
                 temp = pow(double.parse(numbers[i]), double.parse(numbers[i+1])) as double;
                 numbers[i] = temp.toString();
                 result = temp.toString();
+                numbers.removeAt(i+1);
                 if(operators.length > 0){
                   operators.removeAt(i);
                 }
-                numbers.removeAt(i+1);
                 i--;
               }
             }
@@ -91,10 +86,10 @@ class _CalculatorAppState extends State<CalculatorApp> {
               if(operators[i] == 'x'){
                 temp = double.parse(numbers[i]) * double.parse(numbers[i+1]);
                 numbers[i] = temp.toString();
+                numbers.removeAt(i+1);
                 if(operators.length > 1){
                   operators.removeAt(i);
                 }
-                numbers.removeAt(i+1);
                 i--;
               }
             }
@@ -102,22 +97,21 @@ class _CalculatorAppState extends State<CalculatorApp> {
               if(operators[i] == '/'){
                 temp = double.parse(numbers[i]) / double.parse(numbers[i+1]);
                 numbers[i] = temp.toString();
+                numbers.removeAt(i+1);
+                i--;
                 if(operators.length > 0){
                   operators.removeAt(i);
                 }
-                numbers.removeAt(i+1);
-                i--;
               }
             }
-
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '+'){
                 temp = double.parse(numbers[i]) + double.parse(numbers[i+1]);
                 numbers[i] = temp.toString();
+                numbers.removeAt(i+1);
                 if(operators.length > 0){
                   operators.removeAt(i);
                 }
-                numbers.removeAt(i+1);
                 i--;
               }
             }
@@ -125,20 +119,18 @@ class _CalculatorAppState extends State<CalculatorApp> {
             print(operators);
             print(operators.length);
             for(int i = 0; i < operators.length; i++){
-              if(operators[i] == '-' && numbers[0] != ''){
-                temp = double.parse(numbers[i]) - double.parse(numbers[i+1]);
-                numbers[i] = temp.toString();
-                if(operators.length > 1){
+              if(operators[i] == '-'){
+                  temp = double.parse(numbers[i]) - double.parse(numbers[i+1]);
+                  numbers[i] = temp.toString();
+                  numbers.removeAt(i+1);
+                if(operators.length > 0){
                   operators.removeAt(i);
                 }
                 i--;
               }
-              else{
-                numbers[0] = -1 * double.parse(numbers[1]);
-              }
-              numbers.removeAt(i+1);
             }
             result = numbers[0];
+            print(result);
             print(numbers);
             print(operators);
             print(operators.length);
@@ -169,11 +161,14 @@ class _CalculatorAppState extends State<CalculatorApp> {
       }
 
       else if(buttonText == '+/-'){
-        if(expression[0] != '-'){
-          expression = '-' + expression;
+        try{
+          checkInteger[0] = -1 * double.parse(result);
+          result = checkInteger[0];
+          print(checkInteger[0]);
+          print(result);
         }
-        else{
-          expression = expression.substring(1, expression.length);
+        catch(e){
+          null;
         }
       }
 
@@ -196,8 +191,8 @@ class _CalculatorAppState extends State<CalculatorApp> {
   buttonLongPress(String buttonText){
     setState(() {
       if(buttonText.toUpperCase() == 'C'){
-        expression = '';
-        result = '0';
+        expression = '0';
+        result = '';
       }
     });
   }
@@ -220,7 +215,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children:  [
-                  Container(padding: const EdgeInsets.fromLTRB(0, 0, 30.0, 10.0), alignment: Alignment.centerRight,child: AutoSizeText(expression, style: GoogleFonts.nunito(fontSize: expressionFontSize, color: Colors.black87), maxLines: 2,)),
+                  Container(padding: const EdgeInsets.fromLTRB(0, 0, 30.0, 10.0), alignment: Alignment.centerRight,child: AutoSizeText(expression.substring(1, expression.length), style: GoogleFonts.nunito(fontSize: expressionFontSize, color: Colors.black87), maxLines: 2,)),
                   Container(padding: const EdgeInsets.fromLTRB(0, 0, 30.0, 10.0),alignment: Alignment.centerRight,child: AutoSizeText(result, style: GoogleFonts.nunito(fontSize: resultFontSize, color: Colors.black), maxLines: 1,)),
                 ],
               ),
