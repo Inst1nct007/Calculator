@@ -49,23 +49,55 @@ class _CalculatorAppState extends State<CalculatorApp> {
       }
       else if(buttonText == '='){
         try{
-          re = RegExp('[^0-9]');
+          re = RegExp('[^0-9.]');
           numbers = expression.split(re);
+          for(int i = 0; i < numbers.length; i++){
+            if(!numbers.remove('')){
+              break;
+            }
+          }
           result = numbers[0];
-          re = RegExp('[0-9]*');
+          re = RegExp('[0-9.]*');
           operators = expression.split(re);
-          operators.removeAt(0);
-          operators.removeAt(operators.length - 1);
+          for(int i = 0; i < operators.length; i++){
+            if(!operators.remove('')){
+              break;
+            }
+          }
 
           while(numbers.length != 1){
+
             for(int i = 0; i < operators.length; i++){
-              if(operators[i] == '.'){
-                temp = double.parse(numbers[i]) + double.parse(numbers[i+1])/pow(10, numbers[i+1].length);
-                numbers[i] = temp.toString();
-                numbers.removeAt(i+1);
-                if(operators.isNotEmpty){
+              if(operators[i] == '('){
+                if(operators[i+1] == '-'){
                   operators.removeAt(i);
+                  operators.removeAt(i+1);
+                  print(numbers);
+                  print(operators);
+                  print(operators.length);
+                  if(operators[i-1] == '+' && operators.length > 2){
+                    operators.removeAt(i-1);
+                  }
+                  else if(operators[i-1] == '-' && operators.length > 2){
+                    operators.removeAt(i-1);
+                    operators[i-1] = '+';
+                  }
+                  else if(operators[i-1] == 'x' && operators.length > 2){
+                    numbers[i] = (-1 * double.parse(numbers[i])).toString();
+                    operators.removeAt(i);
+                  }
+                  else if(operators[i-1] == '/' && operators.length > 2){
+                    operators.removeAt(i);
+                    numbers[i] = (-1 * double.parse(numbers[i])).toString();
+                  }
                 }
+                else{
+                  if(operators.length > 1){
+                  operators.removeAt(i);
+                  operators.removeAt(i);
+                  }
+                }
+                i--;
               }
             }
 
@@ -81,6 +113,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 i--;
               }
             }
+
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '/'){
                 temp = double.parse(numbers[i]) / double.parse(numbers[i+1]);
@@ -128,7 +161,6 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 i--;
               }
             }
-
           }
           result = numbers[0];
           if(result[0] == '0' && result[1] != '.'){
@@ -136,7 +168,8 @@ class _CalculatorAppState extends State<CalculatorApp> {
           }
         }
         catch(e){
-          result = ':(';
+          //result = ':(';
+          print(e);
         }
 
 
@@ -163,27 +196,29 @@ class _CalculatorAppState extends State<CalculatorApp> {
       }
 
       else if(buttonText == '+/-'){
-          numbers[0] = (-1 * double.parse(result)).toString();
-          operators.clear();
-          operators = numbers[0].split('.');
-          while(operators[1].toString()[operators[1].toString().length - 1] == '0' && operators[1].toString().length > 1){
-            operators[1] = operators[1].toString().substring(0, operators[1].toString().length - 1);
-          }
-          if(operators[1] != '0'){
-            numbers[0] = operators[0] + '.' + operators[1];
-          }
-          else{
-            numbers[0] = operators[0];
-          }
-          try{
-            expression = '0' + numbers[0];
-            result = numbers[0];
-            numbers.removeAt(1);
-            operators.clear();
-          }
-          catch(e){
-            null;
-          }
+        re = RegExp('[^0-9.]');
+        numbers = expression.split(re);
+        numbers[numbers.length - 1] = (-1 * double.parse(numbers[numbers.length - 1])).toString();
+        operators.clear();
+        operators = numbers[numbers.length - 1].split('.');
+        while(operators[1].toString()[operators[1].toString().length - 1] == '0' && operators[1].toString().length > 1){
+          operators[1] = operators[1].toString().substring(0, operators[1].toString().length - 1);
+        }
+        if(operators[1] != '0'){
+          numbers[numbers.length - 1] = operators[0] + '.' + operators[1];
+        }
+        else{
+          numbers[numbers.length - 1] = operators[0];
+        }
+        operators.clear();
+        re = RegExp('[0-9.]*');
+        operators = expression.split(re);
+        operators.removeAt(0);
+        operators.removeAt(operators.length - 1);
+        expression = expression.substring(0, expression.length - int.parse(numbers[numbers.length - 1]).abs().toString().length);
+        expression += '(' + numbers[numbers.length - 1] + ')';
+        numbers.clear();
+        operators.clear();
       }
 
       else{
@@ -210,26 +245,16 @@ class _CalculatorAppState extends State<CalculatorApp> {
       }
       else if(buttonText == '='){
         try{
-          re = RegExp('[^0-9]');
-          numbers = expression.split(re);
-          result = numbers[0];
-          re = RegExp('[0-9]*');
-          operators = expression.split(re);
-          operators.removeAt(0);
-          operators.removeAt(operators.length - 1);
+          String expression = '0';
+          String result = '';
+          double expressionFontSize = 58.0;
+          double resultFontSize = 48.0;
+          var numbers = [];
+          var operators = [];
+          var re;
+          double temp = 0.0;
 
           while(numbers.length != 1){
-
-            for(int i = 0; i < operators.length; i++){
-              if(operators[i] == '.'){
-                temp = double.parse(numbers[i]) + double.parse(numbers[i+1])/pow(10, numbers[i+1].length);
-                numbers[i] = temp.toString();
-                numbers.removeAt(i+1);
-                if(operators.length > 0){
-                  operators.removeAt(i);
-                }
-              }
-            }
 
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '^'){
@@ -237,19 +262,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 numbers[i] = temp.toString();
                 result = temp.toString();
                 numbers.removeAt(i+1);
-                if(operators.length > 0){
-                  operators.removeAt(i);
-                }
-                i--;
-              }
-            }
-
-            for(int i = 0; i < operators.length; i++){
-              if(operators[i] == 'x'){
-                temp = double.parse(numbers[i]) * double.parse(numbers[i+1]);
-                numbers[i] = temp.toString();
-                numbers.removeAt(i+1);
-                if(operators.length > 1){
+                if(operators.isNotEmpty){
                   operators.removeAt(i);
                 }
                 i--;
@@ -260,29 +273,42 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 temp = double.parse(numbers[i]) / double.parse(numbers[i+1]);
                 numbers[i] = temp.toString();
                 numbers.removeAt(i+1);
-                if(operators.length > 0){
+                if(operators.isNotEmpty){
                   operators.removeAt(i);
                 }
                 i--;
               }
             }
+            for(int i = 0; i < operators.length; i++){
+              if(operators[i] == 'x'){
+                temp = double.parse(numbers[i]) * double.parse(numbers[i+1]);
+                numbers[i] = temp.toString();
+                numbers.removeAt(i+1);
+                if(operators.isNotEmpty){
+                  operators.removeAt(i);
+                }
+                i--;
+              }
+            }
+
+            for(int i = 0; i < operators.length; i++){
+              if(operators[i] == '-' && numbers.isNotEmpty){
+                temp = double.parse(numbers[i]) - double.parse(numbers[i+1]);
+                numbers[i] = temp.toString();
+                numbers.removeAt(i+1);
+                if(operators.isNotEmpty){
+                  operators.removeAt(i);
+                }
+                i--;
+              }
+            }
+
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '+'){
                 temp = double.parse(numbers[i]) + double.parse(numbers[i+1]);
                 numbers[i] = temp.toString();
                 numbers.removeAt(i+1);
-                if(operators.length > 0){
-                  operators.removeAt(i);
-                }
-                i--;
-              }
-            }
-            for(int i = 0; i < operators.length; i++){
-              if(operators[i] == '-'){
-                temp = double.parse(numbers[i]) - double.parse(numbers[i+1]);
-                numbers[i] = temp.toString();
-                numbers.removeAt(i+1);
-                if(operators.length > 0){
+                if(operators.isNotEmpty){
                   operators.removeAt(i);
                 }
                 i--;
@@ -402,8 +428,8 @@ class _CalculatorAppState extends State<CalculatorApp> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(child: buildButton('0', 70, Colors.white10, Colors.blueAccent), flex: 1,),
                         Expanded(child: buildButton('+/-', 70, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('0', 70, Colors.white10, Colors.blueAccent), flex: 1,),
                         Expanded(child: buildButton('^', 70, Colors.white10, Colors.blueAccent), flex: 1,),
                         Expanded(child: buildButton('🌟', 70, Colors.white10, Colors.blueAccent), flex: 1,),
                       ],
