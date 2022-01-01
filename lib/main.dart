@@ -58,13 +58,12 @@ class _CalculatorAppState extends State<CalculatorApp> {
           operators.removeAt(operators.length - 1);
 
           while(numbers.length != 1){
-
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '.'){
                 temp = double.parse(numbers[i]) + double.parse(numbers[i+1])/pow(10, numbers[i+1].length);
                 numbers[i] = temp.toString();
                 numbers.removeAt(i+1);
-                if(operators.length > 0){
+                if(operators.isNotEmpty){
                   operators.removeAt(i);
                 }
               }
@@ -76,61 +75,67 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 numbers[i] = temp.toString();
                 result = temp.toString();
                 numbers.removeAt(i+1);
-                if(operators.length > 0){
+                if(operators.isNotEmpty){
                   operators.removeAt(i);
                 }
                 i--;
               }
             }
-            for(int i = 0; i < operators.length; i++){
-              if(operators[i] == 'x'){
-                temp = double.parse(numbers[i]) * double.parse(numbers[i+1]);
-                numbers[i] = temp.toString();
-                numbers.removeAt(i+1);
-                if(operators.length > 1){
-                  operators.removeAt(i);
-                }
-                i--;
-              }
-            }
-
+            print(numbers);
+            print(operators);
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '/'){
                 temp = double.parse(numbers[i]) / double.parse(numbers[i+1]);
                 numbers[i] = temp.toString();
                 numbers.removeAt(i+1);
-                if(operators.length > 0){
+                if(operators.isNotEmpty){
                   operators.removeAt(i);
                 }
                 i--;
               }
             }
-
+            print(numbers);
+            print(operators);
+            for(int i = 0; i < operators.length; i++){
+              if(operators[i] == 'x'){
+                temp = double.parse(numbers[i]) * double.parse(numbers[i+1]);
+                numbers[i] = temp.toString();
+                numbers.removeAt(i+1);
+                if(operators.isNotEmpty){
+                  operators.removeAt(i);
+                }
+                i--;
+              }
+            }
+            print(numbers);
+            print(operators);
+            for(int i = 0; i < operators.length; i++){
+              if(operators[i] == '-'){
+                temp = double.parse(numbers[i]) - double.parse(numbers[i+1]);
+                numbers[i] = temp.toString();
+                numbers.removeAt(i+1);
+                if(operators.isNotEmpty){
+                  operators.removeAt(i);
+                }
+                i--;
+              }
+            }
+            print(numbers);
+            print(operators);
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '+'){
                 temp = double.parse(numbers[i]) + double.parse(numbers[i+1]);
                 numbers[i] = temp.toString();
                 numbers.removeAt(i+1);
-                if(operators.length > 0){
+                if(operators.isNotEmpty){
                   operators.removeAt(i);
                 }
                 i--;
               }
             }
-
-            for(int i = 0; i < operators.length; i++){
-              if(operators[i] == '-'){
-                  temp = double.parse(numbers[i]) - double.parse(numbers[i+1]);
-                  numbers[i] = temp.toString();
-                  numbers.removeAt(i+1);
-                if(operators.length > 0){
-                  operators.removeAt(i);
-                }
-                i--;
-              }
-            }
+            print(numbers);
+            print(operators);
           }
-
           result = numbers[0];
           if(result[0] == '0' && result[1] != '.'){
             result = result.substring(1, result.length);
@@ -164,13 +169,27 @@ class _CalculatorAppState extends State<CalculatorApp> {
       }
 
       else if(buttonText == '+/-'){
-        try{
-          numbers[0] = -1 * double.parse(result);
-          result = numbers[0];
-        }
-        catch(e){
-          null;
-        }
+          numbers[0] = (-1 * double.parse(result)).toString();
+          operators.clear();
+          operators = numbers[0].split('.');
+          while(operators[1].toString()[operators[1].toString().length - 1] == '0' && operators[1].toString().length > 1){
+            operators[1] = operators[1].toString().substring(0, operators[1].toString().length - 1);
+          }
+          if(operators[1] != '0'){
+            numbers[0] = operators[0] + '.' + operators[1];
+          }
+          else{
+            numbers[0] = operators[0];
+          }
+          try{
+            expression = '0' + numbers[0];
+            result = numbers[0];
+            numbers.removeAt(1);
+            operators.clear();
+          }
+          catch(e){
+            null;
+          }
       }
 
       else{
