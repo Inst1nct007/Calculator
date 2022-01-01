@@ -81,8 +81,6 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 i--;
               }
             }
-            print(numbers);
-            print(operators);
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '/'){
                 temp = double.parse(numbers[i]) / double.parse(numbers[i+1]);
@@ -94,8 +92,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 i--;
               }
             }
-            print(numbers);
-            print(operators);
+
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == 'x'){
                 temp = double.parse(numbers[i]) * double.parse(numbers[i+1]);
@@ -107,8 +104,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 i--;
               }
             }
-            print(numbers);
-            print(operators);
+
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '-'){
                 temp = double.parse(numbers[i]) - double.parse(numbers[i+1]);
@@ -120,8 +116,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 i--;
               }
             }
-            print(numbers);
-            print(operators);
+
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '+'){
                 temp = double.parse(numbers[i]) + double.parse(numbers[i+1]);
@@ -133,8 +128,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 i--;
               }
             }
-            print(numbers);
-            print(operators);
+
           }
           result = numbers[0];
           if(result[0] == '0' && result[1] != '.'){
