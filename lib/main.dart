@@ -1,10 +1,10 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 import 'package:auto_size_text/auto_size_text.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+
+import 'dart:math';
 
 void main() => runApp(MyApp());
 
@@ -278,12 +278,14 @@ class _CalculatorAppState extends State<CalculatorApp> {
           if(double.parse(numbers[0]) == (double.parse(numbers[0])).toInt()){
             numbers[0] = double.parse(numbers[0]).toInt().toString();
           }
-          expression = '0' + numbers[0];
-          result = '';
+          result = numbers[0];
         }
         catch(e){
           result = ':(';
         }
+
+        expressionFontSize = 48.0;
+        resultFontSize = 58.0;
       }
     });
   }
