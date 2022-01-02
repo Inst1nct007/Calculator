@@ -149,6 +149,9 @@ class _CalculatorAppState extends State<CalculatorApp> {
             }
           }
           numbers[0] = double.parse(numbers[0]).toString();
+          if(double.parse(numbers[0]) == (double.parse(numbers[0])).toInt()){
+            numbers[0] = double.parse(numbers[0]).toInt().toString();
+          }
           result = numbers[0];
           if(result[0] == '0' && result[1] != '.'){
             result = result.substring(1, result.length);
