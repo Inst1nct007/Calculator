@@ -65,7 +65,6 @@ class _CalculatorAppState extends State<CalculatorApp> {
               break;
             }
           }
-
           int others = 0;
 
           for(int i = 0; i<expression.length; i++){
@@ -76,15 +75,23 @@ class _CalculatorAppState extends State<CalculatorApp> {
               others++;
             }
           }
+
+          int j = 0;
+
           for(int i=0; i<pos.length; i++){
-            if(operators[pos[i]] == '-'){
-              operators.removeAt(pos[i]);
-              numbers[pos[i]] = (-1 * double.parse(numbers[pos[i]])).toString();
+            print(pos[i]-i);
+            print(operators[pos[i]-i]);
+            if(operators[pos[i]-i] == '-'){
+              operators.removeAt(pos[i]-i);
+              print(pos);
+              numbers[pos[i]-i] = (-1 * double.parse(numbers[pos[i]-i])).toString();
+              print(numbers);
             }
           }
+          print(numbers);
+          print(operators);
 
           while(numbers.length != 1){
-
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '^'){
                 numbers[i] = pow(double.parse(numbers[i]), double.parse(numbers[i+1])).toString();
@@ -117,6 +124,8 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 i--;
               }
             }
+            print(numbers);
+            print(operators);
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '-'){
                 numbers[i] = (double.parse(numbers[i]) - double.parse(numbers[i+1])).toString();
@@ -127,6 +136,8 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 i--;
               }
             }
+            print(numbers);
+            print(operators);
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '+'){
                 numbers[i] = (double.parse(numbers[i]) + double.parse(numbers[i+1])).toString();
@@ -206,7 +217,6 @@ class _CalculatorAppState extends State<CalculatorApp> {
               others++;
             }
           }
-
           for(int i=0; i<pos.length; i++){
             if(operators[pos[i]] == '-'){
               operators.removeAt(pos[i]);
