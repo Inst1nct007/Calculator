@@ -148,6 +148,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
               }
             }
           }
+          numbers[0] = double.parse(numbers[0]).toString();
           result = numbers[0];
           if(result[0] == '0' && result[1] != '.'){
             result = result.substring(1, result.length);
@@ -157,53 +158,11 @@ class _CalculatorAppState extends State<CalculatorApp> {
           result = ':(';
         }
 
-
-        try{
-          numbers.addAll(result.split('.'));
-
-          while(numbers[2].toString()[numbers[2].toString().length - 1] == '0' && numbers[2].toString().length > 1){
-            numbers[2] = numbers[2].toString().substring(0, numbers[2].toString().length - 1);
-          }
-          if(numbers[2] != '0'){
-            result = numbers[1] + '.' + numbers[2];
-          }
-          else{
-            result = numbers[1];
-          }
-          numbers.removeAt(2);
-          numbers.removeAt(1);
-        }
-        catch(e){
-          null;
-        }
         expressionFontSize = 48.0;
         resultFontSize = 58.0;
       }
 
       else if(buttonText == '+/-'){
-        re = RegExp('[^0-9.]');
-        numbers = expression.split(re);
-        numbers[numbers.length - 1] = (-1 * double.parse(numbers[numbers.length - 1])).toString();
-        operators.clear();
-        operators = numbers[numbers.length - 1].split('.');
-        while(operators[1].toString()[operators[1].toString().length - 1] == '0' && operators[1].toString().length > 1){
-          operators[1] = operators[1].toString().substring(0, operators[1].toString().length - 1);
-        }
-        if(operators[1] != '0'){
-          numbers[numbers.length - 1] = operators[0] + '.' + operators[1];
-        }
-        else{
-          numbers[numbers.length - 1] = operators[0];
-        }
-        operators.clear();
-        re = RegExp('[0-9.]*');
-        operators = expression.split(re);
-        operators.removeAt(0);
-        operators.removeAt(operators.length - 1);
-        expression = expression.substring(0, expression.length - int.parse(numbers[numbers.length - 1]).abs().toString().length);
-        expression += '(' + numbers[numbers.length - 1] + ')';
-        numbers.clear();
-        operators.clear();
       }
 
       else{
