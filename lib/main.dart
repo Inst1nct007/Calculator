@@ -69,16 +69,20 @@ class _CalculatorAppState extends State<CalculatorApp> {
 
           for(int i = 0; i<expression.length; i++){
             if(i > 0 && !(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57) && !(expression.codeUnitAt(i-1) >= 48 && expression.codeUnitAt(i-1) <= 57)){
+              print(others);
+              print(expression[i-others]);
               pos.add(i-others);
             }
-            else if(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57){
+            else if(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57 || expression[i] == '.'){
               others++;
             }
           }
 
           int j = 0;
+          print(pos);
 
           for(int i=0; i<pos.length; i++){
+            print(i);
             print(pos[i]-i);
             print(operators[pos[i]-i]);
             if(operators[pos[i]-i] == '-'){
