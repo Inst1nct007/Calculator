@@ -69,14 +69,13 @@ class _CalculatorAppState extends State<CalculatorApp> {
           int others = 0;
 
           for(int i = 0; i<expression.length; i++){
-            if(i > 0 && !(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57) && !(expression.codeUnitAt(i-1) >= 48 && expression.codeUnitAt(i-1) <= 57) && expression[i] != '(' && expression[i] != ')'){
-              pos.add(i-others+1);
+            if(i > 0 && !(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57) && !(expression.codeUnitAt(i-1) >= 48 && expression.codeUnitAt(i-1) <= 57)){
+              pos.add(i-others);
             }
-            else{
+            else if(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57){
               others++;
             }
           }
-
           for(int i=0; i<pos.length; i++){
             if(operators[pos[i]] == '-'){
               operators.removeAt(pos[i]);
@@ -118,7 +117,6 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 i--;
               }
             }
-
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '-'){
                 numbers[i] = (double.parse(numbers[i]) - double.parse(numbers[i+1])).toString();
@@ -129,7 +127,6 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 i--;
               }
             }
-
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '+'){
                 numbers[i] = (double.parse(numbers[i]) + double.parse(numbers[i+1])).toString();
@@ -202,10 +199,10 @@ class _CalculatorAppState extends State<CalculatorApp> {
           int others = 0;
 
           for(int i = 0; i<expression.length; i++){
-            if(i > 0 && !(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57) && !(expression.codeUnitAt(i-1) >= 48 && expression.codeUnitAt(i-1) <= 57) && expression[i] != '(' && expression[i] != ')'){
-              pos.add(i-others+1);
+            if(i > 0 && !(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57) && !(expression.codeUnitAt(i-1) >= 48 && expression.codeUnitAt(i-1) <= 57)){
+              pos.add(i-others);
             }
-            else{
+            else if(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57){
               others++;
             }
           }
