@@ -33,6 +33,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
   var numbers = [];
   var operators = [];
   var re;
+  var pos = [];
   double temp = 0.0;
 
   buttonPressed(String buttonText){
@@ -49,6 +50,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
       }
       else if(buttonText == '='){
         try{
+          pos.clear();
           re = RegExp('[^0-9.]');
           numbers = expression.split(re);
           for(int i = 0; i < numbers.length; i++){
@@ -57,49 +59,47 @@ class _CalculatorAppState extends State<CalculatorApp> {
             }
           }
           result = numbers[0];
-          re = RegExp('[0-9.]*');
+          re = RegExp('[0-9.()]*');
           operators = expression.split(re);
           for(int i = 0; i < operators.length; i++){
             if(!operators.remove('')){
               break;
             }
           }
+          int others = 0;
+
+          for(int i = 0; i<expression.length; i++){
+            if(expression[i] != '(' && expression[i] != ')'){
+              //print(expression.codeUnitAt(i));
+                if(i > 0 && !(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57) && !(expression.codeUnitAt(i-1) >= 48 && expression.codeUnitAt(i-1) <= 57)){
+                  pos.add(i-others-2);
+                }
+            }
+            else{
+              others++;
+            }
+          }
+          print(expression);
+          print(operators);
+          print(pos);
+
+          for(int i=0; i<pos.length; i++){
+            print(pos[i]);
+            if(operators[pos[i]] == '-'){
+              print(operators[pos[i]]);
+              operators.removeAt(pos[i]);
+              operators[pos[i] - 1] = '+';
+              print(operators[pos[i]-1]);
+              print(numbers[pos[i]]);
+              numbers[pos[i]] = (-1 * double.parse(numbers[pos[i]])).toString();
+              print(numbers[i]);
+            }
+          }
+
+          //print(numbers);
+          //print(expression);
 
           while(numbers.length != 1){
-
-            for(int i = 0; i < operators.length; i++){
-              if(operators[i] == '('){
-                if(operators[i+1] == '-'){
-                  operators.removeAt(i);
-                  operators.removeAt(i+1);
-                  print(numbers);
-                  print(operators);
-                  print(operators.length);
-                  if(operators[i-1] == '+' && operators.length > 2){
-                    operators.removeAt(i-1);
-                  }
-                  else if(operators[i-1] == '-' && operators.length > 2){
-                    operators.removeAt(i-1);
-                    operators[i-1] = '+';
-                  }
-                  else if(operators[i-1] == 'x' && operators.length > 2){
-                    numbers[i] = (-1 * double.parse(numbers[i])).toString();
-                    operators.removeAt(i);
-                  }
-                  else if(operators[i-1] == '/' && operators.length > 2){
-                    operators.removeAt(i);
-                    numbers[i] = (-1 * double.parse(numbers[i])).toString();
-                  }
-                }
-                else{
-                  if(operators.length > 1){
-                  operators.removeAt(i);
-                  operators.removeAt(i);
-                  }
-                }
-                i--;
-              }
-            }
 
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '^'){
@@ -168,8 +168,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
           }
         }
         catch(e){
-          //result = ':(';
-          print(e);
+          result = ':(';
         }
 
 
@@ -245,14 +244,21 @@ class _CalculatorAppState extends State<CalculatorApp> {
       }
       else if(buttonText == '='){
         try{
-          String expression = '0';
-          String result = '';
-          double expressionFontSize = 58.0;
-          double resultFontSize = 48.0;
-          var numbers = [];
-          var operators = [];
-          var re;
-          double temp = 0.0;
+          re = RegExp('[^0-9.]');
+          numbers = expression.split(re);
+          for(int i = 0; i < numbers.length; i++){
+            if(!numbers.remove('')){
+              break;
+            }
+          }
+          result = numbers[0];
+          re = RegExp('[0-9.()]*');
+          operators = expression.split(re);
+          for(int i = 0; i < operators.length; i++){
+            if(!operators.remove('')){
+              break;
+            }
+          }
 
           while(numbers.length != 1){
 
@@ -268,6 +274,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 i--;
               }
             }
+
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '/'){
                 temp = double.parse(numbers[i]) / double.parse(numbers[i+1]);
@@ -279,6 +286,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 i--;
               }
             }
+
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == 'x'){
                 temp = double.parse(numbers[i]) * double.parse(numbers[i+1]);
@@ -292,7 +300,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
             }
 
             for(int i = 0; i < operators.length; i++){
-              if(operators[i] == '-' && numbers.isNotEmpty){
+              if(operators[i] == '-'){
                 temp = double.parse(numbers[i]) - double.parse(numbers[i+1]);
                 numbers[i] = temp.toString();
                 numbers.removeAt(i+1);
@@ -315,29 +323,10 @@ class _CalculatorAppState extends State<CalculatorApp> {
               }
             }
           }
-          result = numbers[0];
-          if(result[0] == '0' && result[1] != '.'){
-            result = result.substring(1, result.length);
+          expression = numbers[0];
+          if(expression[0] == '0' && expression[1] != '.'){
+            expression = expression.substring(1, expression.length);
           }
-          try{
-            numbers.addAll(result.split('.'));
-
-            while(numbers[2].toString()[numbers[2].toString().length - 1] == '0' && numbers[2].toString().length > 1){
-              numbers[2] = numbers[2].toString().substring(0, numbers[2].toString().length - 1);
-            }
-            if(numbers[2] != '0'){
-              result = numbers[1] + '.' + numbers[2];
-            }
-            else{
-              result = numbers[1];
-            }
-            numbers.removeAt(2);
-            numbers.removeAt(1);
-          }
-          catch(e){
-            null;
-          }
-          expression = '0' + result;
           result = '';
         }
         catch(e){
