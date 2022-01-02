@@ -360,7 +360,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
                         Expanded(child: buildButton('1', 70, Colors.white10, Colors.blueAccent), flex: 1,),
                         Expanded(child: buildButton('2', 70, Colors.white10, Colors.blueAccent), flex: 1,),
                         Expanded(child: buildButton('3', 70, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('.', 70, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('^', 70, Colors.white10, Colors.blueAccent), flex: 1,),
                       ],
                     ),
                   ),
@@ -371,7 +371,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
                       children: [
                         Expanded(child: buildButton('+/-', 70, Colors.white10, Colors.blueAccent), flex: 1,),
                         Expanded(child: buildButton('0', 70, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('^', 70, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('.', 70, Colors.white10, Colors.blueAccent), flex: 1,),
                         Expanded(child: buildButton('🌟', 70, Colors.white10, Colors.blueAccent), flex: 1,),
                       ],
                     ),
