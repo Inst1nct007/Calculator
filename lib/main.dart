@@ -66,38 +66,37 @@ class _CalculatorAppState extends State<CalculatorApp> {
               break;
             }
           }
+
           int others = 0;
 
           for(int i = 0; i<expression.length; i++){
-            if(expression[i] != '(' && expression[i] != ')'){
-              //print(expression.codeUnitAt(i));
-                if(i > 0 && !(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57) && !(expression.codeUnitAt(i-1) >= 48 && expression.codeUnitAt(i-1) <= 57)){
-                  pos.add(i-others-2);
-                }
+            if(i > 0 && !(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57) && !(expression.codeUnitAt(i-1) >= 48 && expression.codeUnitAt(i-1) <= 57) && expression[i] != '(' && expression[i] != ')'){
+              //print(expression[i]);
+              print(others);
+              pos.add(i-others+1);
             }
             else{
               others++;
             }
           }
-          print(expression);
-          print(operators);
+          //print(expression);
+          //print(operators);
           print(pos);
 
           for(int i=0; i<pos.length; i++){
-            print(pos[i]);
+            //print(operators[pos[i]]);
             if(operators[pos[i]] == '-'){
-              print(operators[pos[i]]);
+              //print(operators[pos[i]]);
               operators.removeAt(pos[i]);
-              operators[pos[i] - 1] = '+';
-              print(operators[pos[i]-1]);
-              print(numbers[pos[i]]);
+              //print(operators[pos[i]-1]);
+              //print(numbers[pos[i]]);
               numbers[pos[i]] = (-1 * double.parse(numbers[pos[i]])).toString();
-              print(numbers[i]);
+              //print(numbers[i]);
             }
           }
 
           //print(numbers);
-          //print(expression);
+          //print(operators);
 
           while(numbers.length != 1){
 
