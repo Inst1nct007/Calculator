@@ -275,7 +275,8 @@ class _CalculatorAppState extends State<CalculatorApp> {
           if(double.parse(numbers[0]) == (double.parse(numbers[0])).toInt()){
             numbers[0] = double.parse(numbers[0]).toInt().toString();
           }
-          result = numbers[0];
+          expression = '0' + numbers[0];
+          result = '';
         }
         catch(e){
           result = ':(';
