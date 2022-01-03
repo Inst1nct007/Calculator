@@ -67,13 +67,14 @@ class _CalculatorAppState extends State<CalculatorApp> {
               break;
             }
           }
+
           int others = 0;
 
           for(int i = 0; i<expression.length; i++){
             if(i > 0 && !(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57) && !(expression.codeUnitAt(i-1) >= 48 && expression.codeUnitAt(i-1) <= 57)){
               pos.add(i-others);
             }
-            else if(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57 || expression[i] == '.'){
+            else if(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57 || expression[i] == '.' && expression[i] != '(' && expression[i] != ')'){
               others++;
             }
           }
@@ -212,7 +213,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
             if(i > 0 && !(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57) && !(expression.codeUnitAt(i-1) >= 48 && expression.codeUnitAt(i-1) <= 57)){
               pos.add(i-others);
             }
-            else if(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57 || expression[i] == '.'){
+            else if(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57 || expression[i] == '.' && expression[i] != '(' && expression[i] != ')'){
               others++;
             }
           }
@@ -314,7 +315,19 @@ class _CalculatorAppState extends State<CalculatorApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+
       title: 'Calculator',
+
+      theme: ThemeData(
+        brightness: Brightness.light,
+      ),
+
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+      ),
+
+      themeMode: ThemeMode.system,
+
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Column(
@@ -421,7 +434,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
             )
           ],
         ),
-          backgroundColor: const Color(0xffedf2f4)
+          //backgroundColor: const Color(0xffedf2f4)
       ),
     );
   }
