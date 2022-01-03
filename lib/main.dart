@@ -34,6 +34,8 @@ class _CalculatorAppState extends State<CalculatorApp> {
   var operators = [];
   var re;
   var pos = [];
+  bool isVisible = false;
+  double buttonSize = 70;
 
   buttonPressed(String buttonText){
     setState(() {
@@ -69,8 +71,6 @@ class _CalculatorAppState extends State<CalculatorApp> {
 
           for(int i = 0; i<expression.length; i++){
             if(i > 0 && !(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57) && !(expression.codeUnitAt(i-1) >= 48 && expression.codeUnitAt(i-1) <= 57)){
-              print(others);
-              print(expression[i-others]);
               pos.add(i-others);
             }
             else if(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57 || expression[i] == '.'){
@@ -78,22 +78,12 @@ class _CalculatorAppState extends State<CalculatorApp> {
             }
           }
 
-          int j = 0;
-          print(pos);
-
           for(int i=0; i<pos.length; i++){
-            print(i);
-            print(pos[i]-i);
-            print(operators[pos[i]-i]);
             if(operators[pos[i]-i] == '-'){
               operators.removeAt(pos[i]-i);
-              print(pos);
               numbers[pos[i]-i] = (-1 * double.parse(numbers[pos[i]-i])).toString();
-              print(numbers);
             }
           }
-          print(numbers);
-          print(operators);
 
           while(numbers.length != 1){
             for(int i = 0; i < operators.length; i++){
@@ -128,8 +118,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 i--;
               }
             }
-            print(numbers);
-            print(operators);
+
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '-'){
                 numbers[i] = (double.parse(numbers[i]) - double.parse(numbers[i+1])).toString();
@@ -140,8 +129,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 i--;
               }
             }
-            print(numbers);
-            print(operators);
+
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '+'){
                 numbers[i] = (double.parse(numbers[i]) + double.parse(numbers[i+1])).toString();
@@ -167,7 +155,14 @@ class _CalculatorAppState extends State<CalculatorApp> {
         resultFontSize = 58.0;
       }
 
-      else if(buttonText == '+/-'){
+      else if(buttonText == '/>'){
+        isVisible = !isVisible;
+        if(isVisible == true){
+          buttonSize = 60;
+        }
+        else{
+          buttonSize = 70;
+        }
       }
 
       else{
@@ -217,14 +212,15 @@ class _CalculatorAppState extends State<CalculatorApp> {
             if(i > 0 && !(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57) && !(expression.codeUnitAt(i-1) >= 48 && expression.codeUnitAt(i-1) <= 57)){
               pos.add(i-others);
             }
-            else if(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57){
+            else if(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57 || expression[i] == '.'){
               others++;
             }
           }
+
           for(int i=0; i<pos.length; i++){
-            if(operators[pos[i]] == '-'){
-              operators.removeAt(pos[i]);
-              numbers[pos[i]] = (-1 * double.parse(numbers[pos[i]])).toString();
+            if(operators[pos[i]-i] == '-'){
+              operators.removeAt(pos[i]-i);
+              numbers[pos[i]-i] = (-1 * double.parse(numbers[pos[i]-i])).toString();
             }
           }
 
@@ -302,10 +298,18 @@ class _CalculatorAppState extends State<CalculatorApp> {
     });
   }
 
+  InvisibleButtonPressed(String buttonText){
+    setState(() {
 
+    });
+  }
 
   Widget buildButton(String buttonText, double buttonMeasurement, Color buttonColor, Color textColor){
     return ElevatedButton(onPressed: () => buttonPressed(buttonText), onLongPress: () => buttonLongPress(buttonText), child: Container(height: buttonMeasurement, width: buttonMeasurement, alignment: Alignment.center, child: Text(buttonText, style: GoogleFonts.nunito(color: textColor, fontSize: 20)),), style: ElevatedButton.styleFrom(shape: const CircleBorder(), primary: buttonColor, onPrimary: textColor, elevation: 0.0));
+  }
+
+  Widget InvisibleBuildButton(String buttonText, double buttonMeasurement, Color buttonColor, Color textColor){
+    return ElevatedButton(onPressed: () => InvisibleButtonPressed(buttonText), child: Container(height: buttonMeasurement, width: buttonMeasurement, alignment: Alignment.center, child: Text(buttonText, style: GoogleFonts.nunito(color: textColor, fontSize: 20)),), style: ElevatedButton.styleFrom(shape: const CircleBorder(), primary: buttonColor, onPrimary: textColor, elevation: 0.0));
   }
   @override
   Widget build(BuildContext context) {
@@ -335,10 +339,40 @@ class _CalculatorAppState extends State<CalculatorApp> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(child: buildButton('C', 70, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('/', 70, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('x', 70, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('=', 70, Colors.blueAccent, Colors.white), flex: 1,),
+                        Expanded(child: buildButton('C', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Visibility(visible: isVisible, child: Expanded(child: InvisibleBuildButton('D', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,)),
+                        Expanded(child: buildButton('/', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('x', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('=', buttonSize, Colors.blueAccent, Colors.white), flex: 1,),
+                      ],
+                    ),
+                  ),
+                  Visibility(
+                    visible: isVisible,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(child: InvisibleBuildButton('D', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                          Expanded(child: InvisibleBuildButton('/', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                          Expanded(child: InvisibleBuildButton('x', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                          Expanded(child: InvisibleBuildButton('x', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                          Expanded(child: InvisibleBuildButton('D', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Visibility(visible: isVisible, child: Expanded(child: InvisibleBuildButton('D', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,)),
+                        Expanded(child: buildButton('7', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('8', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('9', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('+', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
                       ],
                     ),
                   ),
@@ -347,10 +381,11 @@ class _CalculatorAppState extends State<CalculatorApp> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(child: buildButton('7', 70, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('8', 70, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('9', 70, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('+', 70, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Visibility(visible: isVisible, child: Expanded(child: InvisibleBuildButton('D', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,)),
+                        Expanded(child: buildButton('4', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('5', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('6', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('-', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
                       ],
                     ),
                   ),
@@ -359,10 +394,11 @@ class _CalculatorAppState extends State<CalculatorApp> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(child: buildButton('4', 70, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('5', 70, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('6', 70, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('-', 70, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Visibility(visible: isVisible, child: Expanded(child: InvisibleBuildButton('D', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,)),
+                        Expanded(child: buildButton('1', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('2', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('3', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('^', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
                       ],
                     ),
                   ),
@@ -371,22 +407,11 @@ class _CalculatorAppState extends State<CalculatorApp> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(child: buildButton('1', 70, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('2', 70, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('3', 70, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('^', 70, Colors.white10, Colors.blueAccent), flex: 1,),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 0.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(child: buildButton('+/-', 70, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('0', 70, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('.', 70, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Expanded(child: buildButton('🌟', 70, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('/>', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Visibility(visible: isVisible, child: Expanded(child: InvisibleBuildButton('D', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,)),
+                        Expanded(child: buildButton('0', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('.', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                        Expanded(child: buildButton('🌟', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
                       ],
                     ),
                   ),
