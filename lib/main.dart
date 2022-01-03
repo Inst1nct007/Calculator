@@ -24,7 +24,7 @@ class CalculatorApp extends StatefulWidget {
   _CalculatorAppState createState() => _CalculatorAppState();
 }
 
-class _CalculatorAppState extends State<CalculatorApp> {
+class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserver {
 
   String expression = '0';
   String result = '';
@@ -36,6 +36,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
   var pos = [];
   bool isVisible = false;
   double buttonSize = 70;
+
 
   buttonPressed(String buttonText){
     setState(() {
@@ -312,6 +313,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
   Widget InvisibleBuildButton(String buttonText, double buttonMeasurement, Color buttonColor, Color textColor){
     return ElevatedButton(onPressed: () => InvisibleButtonPressed(buttonText), child: Container(height: buttonMeasurement, width: buttonMeasurement, alignment: Alignment.center, child: Text(buttonText, style: GoogleFonts.nunito(color: textColor, fontSize: 20)),), style: ElevatedButton.styleFrom(shape: const CircleBorder(), primary: buttonColor, onPrimary: textColor, elevation: 0.0));
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -337,8 +339,8 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children:  [
-                  Container(padding: const EdgeInsets.fromLTRB(0, 0, 30.0, 10.0), alignment: Alignment.centerRight,child: AutoSizeText(expression.substring(1, expression.length), style: GoogleFonts.nunito(fontSize: expressionFontSize, color: Colors.black87), maxLines: 2,)),
-                  Container(padding: const EdgeInsets.fromLTRB(0, 0, 30.0, 10.0),alignment: Alignment.centerRight,child: AutoSizeText(result, style: GoogleFonts.nunito(fontSize: resultFontSize, color: Colors.black), maxLines: 1,)),
+                  Container(padding: const EdgeInsets.fromLTRB(0, 0, 30.0, 10.0), alignment: Alignment.centerRight,child: AutoSizeText(expression.substring(1, expression.length), style: GoogleFonts.nunito(fontSize: expressionFontSize,), maxLines: 2,)),
+                  Container(padding: const EdgeInsets.fromLTRB(0, 0, 30.0, 10.0),alignment: Alignment.centerRight,child: AutoSizeText(result, style: GoogleFonts.nunito(fontSize: resultFontSize), maxLines: 1,)),
                 ],
               ),
               flex: 3,
