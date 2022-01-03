@@ -6,6 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'dart:math';
 
+import 'package:flutter/services.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -36,9 +38,22 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
   var pos = [];
   bool isVisible = false;
   double buttonSize = 70;
+  String angleformat = 'rad';
+  bool isRad = true;
+  double deg = 1;
+
+  int factorial(int number){
+    if(number != 0){
+      return number * factorial(number - 1);
+    }
+    else{
+      return 1;
+    }
+  }
 
 
   buttonPressed(String buttonText){
+    SystemSound.play(SystemSoundType.click);
     setState(() {
       if(buttonText.toUpperCase() == 'C'){
         try{
@@ -72,7 +87,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
           int others = 0;
 
           for(int i = 0; i<expression.length; i++){
-            if(i > 0 && !(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57) && !(expression.codeUnitAt(i-1) >= 48 && expression.codeUnitAt(i-1) <= 57)){
+            if(i > 0 && !(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57) && !(expression.codeUnitAt(i-1) >= 48 && expression.codeUnitAt(i-1) <= 57) && expression[i] == 's' && expression[i] == 'c' && expression[i] == 't'){
               pos.add(i-others);
             }
             else if(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57 || expression[i] == '.' && expression[i] != '(' && expression[i] != ')'){
@@ -87,7 +102,62 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
             }
           }
 
-          while(numbers.length != 1){
+          while(numbers.length != 1 || operators.isNotEmpty){
+
+            for(int i = 0; i < operators.length; i++){
+              if(operators[i] == 's'){
+                if(i==0){
+                  numbers[i] = sin(int.parse(numbers[i+1]) / deg).toString();
+                  numbers.removeAt(i+1);
+                }
+                else{
+                  numbers[i] = sin(int.parse(numbers[i]) / deg).toString();
+                }
+                if(operators.isNotEmpty){
+                  operators.removeAt(i);
+                }
+              }
+            }
+
+            for(int i = 0; i < operators.length; i++){
+              if(operators[i] == 'c'){
+                if(i==0){
+                  numbers[i] = cos(int.parse(numbers[i+1]) / deg).toString();
+                  numbers.removeAt(i+1);
+                }
+                else{
+                  numbers[i] = cos(int.parse(numbers[i]) / deg).toString();
+                }
+                if(operators.isNotEmpty){
+                  operators.removeAt(i);
+                }
+              }
+            }
+
+            for(int i = 0; i < operators.length; i++){
+              if(operators[i] == 't'){
+                if(i==0){
+                  numbers[i] = tan(int.parse(numbers[i+1]) / deg).toString();
+                  numbers.removeAt(i+1);
+                }
+                else{
+                  numbers[i] = tan(int.parse(numbers[i]) / deg).toString();
+                }
+                if(operators.isNotEmpty){
+                  operators.removeAt(i);
+                }
+              }
+            }
+
+            for(int i = 0; i < operators.length; i++){
+              if(operators[i] == '!'){
+                numbers[i] = factorial(int.parse(numbers[i])).toString();
+                if(operators.isNotEmpty){
+                  operators.removeAt(i);
+                }
+              }
+            }
+
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '^'){
                 numbers[i] = pow(double.parse(numbers[i]), double.parse(numbers[i+1])).toString();
@@ -167,6 +237,18 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
         }
       }
 
+      else if(buttonText == 'sin'){
+        expression += 's';
+      }
+
+      else if(buttonText == 'cos'){
+        expression += 'c';
+      }
+
+      else if(buttonText == 'tan'){
+        expression += 't';
+      }
+
       else{
         if(buttonText == '0'){
           if(expression != ''){
@@ -176,6 +258,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
         else if(buttonText == '🌟'){
 
         }
+
         else{
           expression += buttonText;
         }
@@ -184,6 +267,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
   }
 
   buttonLongPress(String buttonText){
+    HapticFeedback.heavyImpact();
     setState(() {
       if(buttonText.toUpperCase() == 'C'){
         expression = '0';
@@ -211,7 +295,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
           int others = 0;
 
           for(int i = 0; i<expression.length; i++){
-            if(i > 0 && !(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57) && !(expression.codeUnitAt(i-1) >= 48 && expression.codeUnitAt(i-1) <= 57)){
+            if(i > 0 && !(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57) && !(expression.codeUnitAt(i-1) >= 48 && expression.codeUnitAt(i-1) <= 57) && expression[i] == 's' && expression[i] == 'c' && expression[i] == 't'){
               pos.add(i-others);
             }
             else if(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57 || expression[i] == '.' && expression[i] != '(' && expression[i] != ')'){
@@ -226,7 +310,70 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
             }
           }
 
-          while(numbers.length != 1){
+          while(numbers.length != 1 || operators.isNotEmpty){
+
+            for(int i = 0; i < operators.length; i++){
+              if(operators[i] == 's'){
+                if(i==0){
+                  numbers[i] = sin(int.parse(numbers[i+1]) / deg).toString();
+                  numbers.removeAt(i+1);
+                }
+                else{
+                  numbers[i] = sin(int.parse(numbers[i]) / deg).toString();
+                }
+                if(operators.isNotEmpty){
+                  operators.removeAt(i);
+                }
+              }
+            }
+
+            for(int i = 0; i < operators.length; i++){
+              if(operators[i] == 'c'){
+                if(i==0){
+                  numbers[i] = cos(int.parse(numbers[i+1]) / deg).toString();
+                  numbers.removeAt(i+1);
+                }
+                else{
+                  numbers[i] = cos(int.parse(numbers[i]) / deg).toString();
+                }
+                if(operators.isNotEmpty){
+                  operators.removeAt(i);
+                }
+              }
+            }
+
+            for(int i = 0; i < operators.length; i++){
+              if(operators[i] == 't'){
+                if(i==0){
+                  numbers[i] = tan(int.parse(numbers[i+1]) / deg).toString();
+                  numbers.removeAt(i+1);
+                }
+                else{
+                  numbers[i] = tan(int.parse(numbers[i]) / deg).toString();
+                }
+                if(operators.isNotEmpty){
+                  operators.removeAt(i);
+                }
+              }
+            }
+
+            for(int i = 0; i < operators.length; i++){
+              if(operators[i] == '!'){
+                numbers[i] = factorial(int.parse(numbers[i])).toString();
+                if(operators.isNotEmpty){
+                  operators.removeAt(i);
+                }
+              }
+            }
+
+            for(int i = 0; i < operators.length; i++){
+              if(operators[i] == '!'){
+                numbers[i] = factorial(int.parse(numbers[i])).toString();
+                if(operators.isNotEmpty){
+                  operators.removeAt(i);
+                }
+              }
+            }
 
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '^'){
@@ -300,9 +447,19 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
     });
   }
 
-  InvisibleButtonPressed(String buttonText){
+  angleButton(String buttonText){
     setState(() {
+      if(angleformat == 'rad'){
+        angleformat = 'deg';
+        isRad = !isRad;
+        deg = 57.295779513;
+      }
 
+      else{
+        angleformat = 'rad';
+        isRad = !isRad;
+        deg = 1;
+      }
     });
   }
 
@@ -310,8 +467,8 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
     return ElevatedButton(onPressed: () => buttonPressed(buttonText), onLongPress: () => buttonLongPress(buttonText), child: Container(height: buttonMeasurement, width: buttonMeasurement, alignment: Alignment.center, child: Text(buttonText, style: GoogleFonts.nunito(color: textColor, fontSize: 20)),), style: ElevatedButton.styleFrom(shape: const CircleBorder(), primary: buttonColor, onPrimary: textColor, elevation: 0.0));
   }
 
-  Widget InvisibleBuildButton(String buttonText, double buttonMeasurement, Color buttonColor, Color textColor){
-    return ElevatedButton(onPressed: () => InvisibleButtonPressed(buttonText), child: Container(height: buttonMeasurement, width: buttonMeasurement, alignment: Alignment.center, child: Text(buttonText, style: GoogleFonts.nunito(color: textColor, fontSize: 20)),), style: ElevatedButton.styleFrom(shape: const CircleBorder(), primary: buttonColor, onPrimary: textColor, elevation: 0.0));
+  Widget buildAngleButton(String buttonText, double buttonMeasurement, Color buttonColor, Color textColor){
+    return ElevatedButton(onPressed: () => angleButton(buttonText), child: Container(height: buttonMeasurement, width: buttonMeasurement, alignment: Alignment.center, child: Text(buttonText, style: GoogleFonts.nunito(color: textColor, fontSize: 20)),), style: ElevatedButton.styleFrom(shape: const CircleBorder(), primary: buttonColor, onPrimary: textColor, elevation: 0.0));
   }
 
   @override
@@ -355,7 +512,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Expanded(child: buildButton('C', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Visibility(visible: isVisible, child: Expanded(child: InvisibleBuildButton('D', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,)),
+                        Visibility(visible: isVisible, child: Expanded(child: buildButton('!', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,)),
                         Expanded(child: buildButton('/', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
                         Expanded(child: buildButton('x', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
                         Expanded(child: buildButton('=', buttonSize, Colors.blueAccent, Colors.white), flex: 1,),
@@ -369,11 +526,11 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Expanded(child: InvisibleBuildButton('D', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
-                          Expanded(child: InvisibleBuildButton('/', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
-                          Expanded(child: InvisibleBuildButton('x', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
-                          Expanded(child: InvisibleBuildButton('x', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
-                          Expanded(child: InvisibleBuildButton('D', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                          Expanded(child: buildAngleButton(angleformat, buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                          Expanded(child: buildButton('sin', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                          Expanded(child: buildButton('cos', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                          Expanded(child: buildButton('tan', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                          Expanded(child: buildButton('D', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
                         ],
                       ),
                     ),
@@ -383,7 +540,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Visibility(visible: isVisible, child: Expanded(child: InvisibleBuildButton('D', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,)),
+                        Visibility(visible: isVisible, child: Expanded(child: buildButton('D', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,)),
                         Expanded(child: buildButton('7', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
                         Expanded(child: buildButton('8', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
                         Expanded(child: buildButton('9', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
@@ -396,7 +553,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Visibility(visible: isVisible, child: Expanded(child: InvisibleBuildButton('D', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,)),
+                        Visibility(visible: isVisible, child: Expanded(child: buildButton('D', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,)),
                         Expanded(child: buildButton('4', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
                         Expanded(child: buildButton('5', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
                         Expanded(child: buildButton('6', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
@@ -409,7 +566,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Visibility(visible: isVisible, child: Expanded(child: InvisibleBuildButton('D', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,)),
+                        Visibility(visible: isVisible, child: Expanded(child: buildButton('D', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,)),
                         Expanded(child: buildButton('1', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
                         Expanded(child: buildButton('2', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
                         Expanded(child: buildButton('3', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
@@ -423,7 +580,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Expanded(child: buildButton('/>', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Visibility(visible: isVisible, child: Expanded(child: InvisibleBuildButton('D', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,)),
+                        Visibility(visible: isVisible, child: Expanded(child: buildButton('D', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,)),
                         Expanded(child: buildButton('0', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
                         Expanded(child: buildButton('.', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
                         Expanded(child: buildButton('🌟', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
@@ -436,7 +593,6 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
             )
           ],
         ),
-          //backgroundColor: const Color(0xffedf2f4)
       ),
     );
   }
