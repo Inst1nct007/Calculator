@@ -305,11 +305,11 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
 
       else{
         if(buttonText == '0'){
-          if(expression != ''){
+          if(expression != '0'){
           expression += buttonText;
           }
         }
-        if(buttonText == '🌟'){
+        else if(buttonText == '🌟'){
 
         }
 
