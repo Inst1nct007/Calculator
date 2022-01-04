@@ -84,6 +84,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
               break;
             }
           }
+
           if(operators.isNotEmpty){
             int others = 0;
 
@@ -103,8 +104,10 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
               }
             }
 
-            while(numbers.length != 1 && operators.isNotEmpty){
-
+            while(numbers.length > 1){
+              print(expression);
+              print(numbers);
+              print(operators);
               for(int i = 0; i < operators.length; i++){
                 if(operators[i] == '√'){
                   if(i==0){
@@ -202,7 +205,9 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
                   }
                 }
               }
-
+              print(expression);
+              print(numbers);
+              print(operators);
               for(int i = 0; i < operators.length; i++){
                 if(operators[i] == '!'){
                   numbers[i] = factorial(int.parse(numbers[i])).toString();
@@ -211,7 +216,9 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
                   }
                 }
               }
-
+              print(expression);
+              print(numbers);
+              print(operators);
               for(int i = 0; i < operators.length; i++){
                 if(operators[i] == '^'){
                   numbers[i] = pow(double.parse(numbers[i]), double.parse(numbers[i+1])).toString();
@@ -365,7 +372,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
             }
           }
 
-          while(numbers.length != 1 && operators.isNotEmpty){
+          while(numbers.length > 1){
 
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '√'){
