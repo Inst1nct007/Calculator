@@ -84,194 +84,196 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
               break;
             }
           }
+          if(operators.isNotEmpty){
+            int others = 0;
 
-          int others = 0;
+            for(int i = 0; i<expression.length; i++){
+              if(i > 0 && !(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57) && !(expression.codeUnitAt(i-1) >= 48 && expression.codeUnitAt(i-1) <= 57) || expression[i] == 's' || expression[i] == 'c' || expression[i] == 't'){
+                pos.add(i-others);
+              }
+              else if(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57 || expression[i] == '.' && expression[i] != '(' && expression[i] != ')'){
+                others++;
+              }
+            }
 
-          for(int i = 0; i<expression.length; i++){
-            if(i > 0 && !(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57) && !(expression.codeUnitAt(i-1) >= 48 && expression.codeUnitAt(i-1) <= 57) || expression[i] == 's' || expression[i] == 'c' || expression[i] == 't'){
-              pos.add(i-others);
+            for(int i=0; i<pos.length; i++){
+              if(operators[pos[i]-i] == '-'){
+                operators.removeAt(pos[i]-i);
+                numbers[pos[i]-i] = (-1 * double.parse(numbers[pos[i]-i])).toString();
+              }
             }
-            else if(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57 || expression[i] == '.' && expression[i] != '(' && expression[i] != ')'){
-              others++;
+
+            while(numbers.length != 1 && operators.isNotEmpty){
+
+              for(int i = 0; i < operators.length; i++){
+                if(operators[i] == '√'){
+                  if(i==0){
+                    numbers[i] = sqrt(double.parse(numbers[i+1])).toString();
+                    numbers.removeAt(i+1);
+                  }
+                  else{
+                    numbers[i] = sqrt(double.parse(numbers[i])).toString();
+                  }
+                  if(operators.isNotEmpty){
+                    operators.removeAt(i);
+                  }
+                }
+              }
+
+              for(int i = 0; i < operators.length; i++){
+                if(operators[i] == 's' && !isButtonDisabled){
+                  if(i==0){
+                    numbers[i] = sin(double.parse(numbers[i+1])).toString();
+                    numbers.removeAt(i+1);
+                  }
+                  else{
+                    numbers[i] = sin(double.parse(numbers[i])).toString();
+                  }
+                  if(operators.isNotEmpty){
+                    operators.removeAt(i);
+                  }
+                }
+                else if(operators[i] == 's' && isButtonDisabled){
+                  if(i==0){
+
+                    numbers[i] = asin(double.parse(numbers[i+1])).toString();
+
+                    numbers.removeAt(i+1);
+                  }
+                  else{
+                    numbers[i] = asin(double.parse(numbers[i])).toString();
+                  }
+                  if(operators.isNotEmpty){
+                    operators.removeAt(i);
+                  }
+                }
+              }
+
+              for(int i = 0; i < operators.length; i++){
+                if(operators[i] == 'c' && !isButtonDisabled){
+                  if(i==0){
+                    numbers[i] = cos(double.parse(numbers[i+1])).toString();
+                    numbers.removeAt(i+1);
+                  }
+                  else{
+                    numbers[i] = cos(double.parse(numbers[i])).toString();
+                  }
+                  if(operators.isNotEmpty){
+                    operators.removeAt(i);
+                  }
+                }
+                else if(operators[i] == 'c' && isButtonDisabled){
+                  if(i==0){
+                    numbers[i] = acos(double.parse(numbers[i+1])).toString();
+                    numbers.removeAt(i+1);
+                  }
+                  else{
+                    numbers[i] = acos(double.parse(numbers[i])).toString();
+                  }
+                  if(operators.isNotEmpty){
+                    operators.removeAt(i);
+                  }
+                }
+              }
+
+              for(int i = 0; i < operators.length; i++){
+                if(operators[i] == 't' && !isButtonDisabled){
+                  if(i==0){
+                    numbers[i] = tan(double.parse(numbers[i+1])).toString();
+                    numbers.removeAt(i+1);
+                  }
+                  else{
+                    numbers[i] = tan(double.parse(numbers[i])).toString();
+                  }
+                  if(operators.isNotEmpty){
+                    operators.removeAt(i);
+                  }
+                }
+                else if(operators[i] == 't' && isButtonDisabled){
+                  if(i==0){
+                    numbers[i] = atan(double.parse(numbers[i+1])).toString();
+                    numbers.removeAt(i+1);
+                  }
+                  else{
+                    numbers[i] = atan(double.parse(numbers[i])).toString();
+                  }
+                  if(operators.isNotEmpty){
+                    operators.removeAt(i);
+                  }
+                }
+              }
+
+              for(int i = 0; i < operators.length; i++){
+                if(operators[i] == '!'){
+                  numbers[i] = factorial(int.parse(numbers[i])).toString();
+                  if(operators.isNotEmpty){
+                    operators.removeAt(i);
+                  }
+                }
+              }
+
+              for(int i = 0; i < operators.length; i++){
+                if(operators[i] == '^'){
+                  numbers[i] = pow(double.parse(numbers[i]), double.parse(numbers[i+1])).toString();
+                  numbers.removeAt(i+1);
+                  if(operators.isNotEmpty){
+                    operators.removeAt(i);
+                  }
+                  i--;
+                }
+              }
+
+              for(int i = 0; i < operators.length; i++){
+                if(operators[i] == '/'){
+                  numbers[i] = (double.parse(numbers[i]) / double.parse(numbers[i+1])).toString();
+                  numbers.removeAt(i+1);
+                  if(operators.isNotEmpty){
+                    operators.removeAt(i);
+                  }
+                  i--;
+                }
+              }
+
+              for(int i = 0; i < operators.length; i++){
+                if(operators[i] == 'x'){
+                  numbers[i] = (double.parse(numbers[i]) * double.parse(numbers[i+1])).toString();
+                  numbers.removeAt(i+1);
+                  if(operators.isNotEmpty){
+                    operators.removeAt(i);
+                  }
+                  i--;
+                }
+              }
+
+              for(int i = 0; i < operators.length; i++){
+                if(operators[i] == '-'){
+                  numbers[i] = (double.parse(numbers[i]) - double.parse(numbers[i+1])).toString();
+                  numbers.removeAt(i+1);
+                  if(operators.isNotEmpty){
+                    operators.removeAt(i);
+                  }
+                  i--;
+                }
+              }
+
+              for(int i = 0; i < operators.length; i++){
+                if(operators[i] == '+'){
+                  numbers[i] = (double.parse(numbers[i]) + double.parse(numbers[i+1])).toString();
+                  numbers.removeAt(i+1);
+                  if(operators.isNotEmpty){
+                    operators.removeAt(i);
+                  }
+                  i--;
+                }
+              }
             }
+
+            numbers[0] = double.parse(numbers[0]).toString();
+            if(double.parse(numbers[0]) == (double.parse(numbers[0])).toInt()){
+              numbers[0] = double.parse(numbers[0]).toInt().toString();
+            }
+            result = numbers[0];
           }
-
-          for(int i=0; i<pos.length; i++){
-            if(operators[pos[i]-i] == '-'){
-              operators.removeAt(pos[i]-i);
-              numbers[pos[i]-i] = (-1 * double.parse(numbers[pos[i]-i])).toString();
-            }
-          }
-
-          while(numbers.length != 1 || operators.isNotEmpty){
-
-            for(int i = 0; i < operators.length; i++){
-              if(operators[i] == '√'){
-                if(i==0){
-                  numbers[i] = sqrt(double.parse(numbers[i+1])).toString();
-                  numbers.removeAt(i+1);
-                }
-                else{
-                  numbers[i] = sqrt(double.parse(numbers[i])).toString();
-                }
-                if(operators.isNotEmpty){
-                  operators.removeAt(i);
-                }
-              }
-            }
-
-            for(int i = 0; i < operators.length; i++){
-              if(operators[i] == 's' && !isButtonDisabled){
-                if(i==0){
-                  numbers[i] = sin(double.parse(numbers[i+1])).toString();
-                  numbers.removeAt(i+1);
-                }
-                else{
-                  numbers[i] = sin(double.parse(numbers[i])).toString();
-                }
-                if(operators.isNotEmpty){
-                  operators.removeAt(i);
-                }
-              }
-              else if(operators[i] == 's' && isButtonDisabled){
-                if(i==0){
-
-                  numbers[i] = asin(double.parse(numbers[i+1])).toString();
-
-                  numbers.removeAt(i+1);
-                }
-                else{
-                  numbers[i] = asin(double.parse(numbers[i])).toString();
-                }
-                if(operators.isNotEmpty){
-                  operators.removeAt(i);
-                }
-              }
-            }
-
-            for(int i = 0; i < operators.length; i++){
-              if(operators[i] == 'c' && !isButtonDisabled){
-                if(i==0){
-                  numbers[i] = cos(double.parse(numbers[i+1])).toString();
-                  numbers.removeAt(i+1);
-                }
-                else{
-                  numbers[i] = cos(double.parse(numbers[i])).toString();
-                }
-                if(operators.isNotEmpty){
-                  operators.removeAt(i);
-                }
-              }
-              else if(operators[i] == 'c' && isButtonDisabled){
-                if(i==0){
-                  numbers[i] = acos(double.parse(numbers[i+1])).toString();
-                  numbers.removeAt(i+1);
-                }
-                else{
-                  numbers[i] = acos(double.parse(numbers[i])).toString();
-                }
-                if(operators.isNotEmpty){
-                  operators.removeAt(i);
-                }
-              }
-            }
-
-            for(int i = 0; i < operators.length; i++){
-              if(operators[i] == 't' && !isButtonDisabled){
-                if(i==0){
-                  numbers[i] = tan(double.parse(numbers[i+1])).toString();
-                  numbers.removeAt(i+1);
-                }
-                else{
-                  numbers[i] = tan(double.parse(numbers[i])).toString();
-                }
-                if(operators.isNotEmpty){
-                  operators.removeAt(i);
-                }
-              }
-              else if(operators[i] == 't' && isButtonDisabled){
-                if(i==0){
-                  numbers[i] = atan(double.parse(numbers[i+1])).toString();
-                  numbers.removeAt(i+1);
-                }
-                else{
-                  numbers[i] = atan(double.parse(numbers[i])).toString();
-                }
-                if(operators.isNotEmpty){
-                  operators.removeAt(i);
-                }
-              }
-            }
-
-            for(int i = 0; i < operators.length; i++){
-              if(operators[i] == '!'){
-                numbers[i] = factorial(int.parse(numbers[i])).toString();
-                if(operators.isNotEmpty){
-                  operators.removeAt(i);
-                }
-              }
-            }
-
-            for(int i = 0; i < operators.length; i++){
-              if(operators[i] == '^'){
-                numbers[i] = pow(double.parse(numbers[i]), double.parse(numbers[i+1])).toString();
-                numbers.removeAt(i+1);
-                if(operators.isNotEmpty){
-                  operators.removeAt(i);
-                }
-                i--;
-              }
-            }
-
-            for(int i = 0; i < operators.length; i++){
-              if(operators[i] == '/'){
-                numbers[i] = (double.parse(numbers[i]) / double.parse(numbers[i+1])).toString();
-                numbers.removeAt(i+1);
-                if(operators.isNotEmpty){
-                  operators.removeAt(i);
-                }
-                i--;
-              }
-            }
-
-            for(int i = 0; i < operators.length; i++){
-              if(operators[i] == 'x'){
-                numbers[i] = (double.parse(numbers[i]) * double.parse(numbers[i+1])).toString();
-                numbers.removeAt(i+1);
-                if(operators.isNotEmpty){
-                  operators.removeAt(i);
-                }
-                i--;
-              }
-            }
-
-            for(int i = 0; i < operators.length; i++){
-              if(operators[i] == '-'){
-                numbers[i] = (double.parse(numbers[i]) - double.parse(numbers[i+1])).toString();
-                numbers.removeAt(i+1);
-                if(operators.isNotEmpty){
-                  operators.removeAt(i);
-                }
-                i--;
-              }
-            }
-
-            for(int i = 0; i < operators.length; i++){
-              if(operators[i] == '+'){
-                numbers[i] = (double.parse(numbers[i]) + double.parse(numbers[i+1])).toString();
-                numbers.removeAt(i+1);
-                if(operators.isNotEmpty){
-                  operators.removeAt(i);
-                }
-                i--;
-              }
-            }
-          }
-          numbers[0] = double.parse(numbers[0]).toString();
-          if(double.parse(numbers[0]) == (double.parse(numbers[0])).toInt()){
-            numbers[0] = double.parse(numbers[0]).toInt().toString();
-          }
-          result = numbers[0];
         }
         catch(e){
           result = ':(';
@@ -304,7 +306,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
       }
 
       else{
-        if(buttonText == '0'){
+        if(buttonText == '0' || buttonText == '00'){
           if(expression != '0'){
           expression += buttonText;
           }
@@ -363,7 +365,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
             }
           }
 
-          while(numbers.length != 1 || operators.isNotEmpty){
+          while(numbers.length != 1 && operators.isNotEmpty){
 
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '√'){
