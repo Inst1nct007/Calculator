@@ -28,14 +28,13 @@ class CalculatorApp extends StatefulWidget {
 
 class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserver {
 
-  String expression = '0';
+  String expression = '';
   String result = '';
   double expressionFontSize = 58.0;
   double resultFontSize = 48.0;
   var numbers = [];
   var operators = [];
   var re;
-  var pos = [];
   bool isVisible = false;
   double buttonSize = 70;
   String angleFormat = 'rad';
@@ -68,8 +67,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
       }
       else if(buttonText == '='){
         try{
-          pos.clear();
-          re = RegExp('[^0-9.]');
+          re = RegExp('[^0-9.-]');
           numbers = expression.split(re);
           for(int i = 0; i < numbers.length; i++){
             if(!numbers.remove('')){
@@ -77,46 +75,41 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
             }
           }
           result = numbers[0];
-          re = RegExp('[0-9.()]*');
+          re = RegExp('[0-9(). ]');
           operators = expression.split(re);
+
+          numbers.removeWhere((number) => number == '' || number == '-' || number == '--' || number == '+-' || number == '-+');
+          operators.removeWhere((operator) => operator == '');
+          print(numbers);
+          print(operators);
+
           for(int i = 0; i < operators.length; i++){
-            if(!operators.remove('')){
-              break;
+            if(operators[i] == '--' || operators[i] == '++'){
+              operators[i] = '+';
+            }
+            else if(operators[i] == '+-' || operators[i] == '-+'){
+              operators[i] = '-';
+            }
+            else if(operators[i] == '-'){
+              if(i == 0){
+                operators.removeAt(i);
+              }
+              else{
+                if(operators[i-1] != '^'){
+                  operators[i] = '+';
+                }
+                else{
+                  operators.removeAt(i);
+                }
+              }
             }
           }
-
-          if(operators.isNotEmpty){
-            int others = 0;
-
-            for(int i = 0; i<expression.length; i++){
-              if(i > 0 && !(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57) && !(expression.codeUnitAt(i-1) >= 48 && expression.codeUnitAt(i-1) <= 57) || expression[i] == 's' || expression[i] == 'c' || expression[i] == 't'){
-                pos.add(i-others);
-              }
-              else if(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57 || expression[i] == '.' && expression[i] != '(' && expression[i] != ')'){
-                others++;
-              }
-            }
-
-            for(int i=0; i<pos.length; i++){
-              if(operators[pos[i]-i] == '-'){
-                operators.removeAt(pos[i]-i);
-                numbers[pos[i]-i] = (-1 * double.parse(numbers[pos[i]-i])).toString();
-              }
-            }
-
-            while(numbers.length > 1){
-              print(expression);
-              print(numbers);
-              print(operators);
+          print(numbers);
+          print(operators);
+            while((numbers.length > 1) || operators.isNotEmpty){
               for(int i = 0; i < operators.length; i++){
                 if(operators[i] == '√'){
-                  if(i==0){
-                    numbers[i] = sqrt(double.parse(numbers[i+1])).toString();
-                    numbers.removeAt(i+1);
-                  }
-                  else{
                     numbers[i] = sqrt(double.parse(numbers[i])).toString();
-                  }
                   if(operators.isNotEmpty){
                     operators.removeAt(i);
                   }
@@ -124,28 +117,8 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
               }
 
               for(int i = 0; i < operators.length; i++){
-                if(operators[i] == 's' && !isButtonDisabled){
-                  if(i==0){
-                    numbers[i] = sin(double.parse(numbers[i+1])).toString();
-                    numbers.removeAt(i+1);
-                  }
-                  else{
-                    numbers[i] = sin(double.parse(numbers[i])).toString();
-                  }
-                  if(operators.isNotEmpty){
-                    operators.removeAt(i);
-                  }
-                }
-                else if(operators[i] == 's' && isButtonDisabled){
-                  if(i==0){
-
-                    numbers[i] = asin(double.parse(numbers[i+1])).toString();
-
-                    numbers.removeAt(i+1);
-                  }
-                  else{
-                    numbers[i] = asin(double.parse(numbers[i])).toString();
-                  }
+                if(operators[i] == 'ln'){
+                    numbers[i] = log(double.parse(numbers[i])).toString();
                   if(operators.isNotEmpty){
                     operators.removeAt(i);
                   }
@@ -153,26 +126,8 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
               }
 
               for(int i = 0; i < operators.length; i++){
-                if(operators[i] == 'c' && !isButtonDisabled){
-                  if(i==0){
-                    numbers[i] = cos(double.parse(numbers[i+1])).toString();
-                    numbers.removeAt(i+1);
-                  }
-                  else{
-                    numbers[i] = cos(double.parse(numbers[i])).toString();
-                  }
-                  if(operators.isNotEmpty){
-                    operators.removeAt(i);
-                  }
-                }
-                else if(operators[i] == 'c' && isButtonDisabled){
-                  if(i==0){
-                    numbers[i] = acos(double.parse(numbers[i+1])).toString();
-                    numbers.removeAt(i+1);
-                  }
-                  else{
-                    numbers[i] = acos(double.parse(numbers[i])).toString();
-                  }
+                if(operators[i] == 'log'){
+                    numbers[i] = (log(double.parse(numbers[i])) * 0.434294189774).toString();
                   if(operators.isNotEmpty){
                     operators.removeAt(i);
                   }
@@ -180,34 +135,50 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
               }
 
               for(int i = 0; i < operators.length; i++){
-                if(operators[i] == 't' && !isButtonDisabled){
-                  if(i==0){
-                    numbers[i] = tan(double.parse(numbers[i+1])).toString();
-                    numbers.removeAt(i+1);
-                  }
-                  else{
-                    numbers[i] = tan(double.parse(numbers[i])).toString();
-                  }
+                if(operators[i] == 'sin' && !isButtonDisabled){
+                  numbers[i] = sin(double.parse(numbers[i])).toString();
                   if(operators.isNotEmpty){
                     operators.removeAt(i);
                   }
                 }
-                else if(operators[i] == 't' && isButtonDisabled){
-                  if(i==0){
-                    numbers[i] = atan(double.parse(numbers[i+1])).toString();
-                    numbers.removeAt(i+1);
-                  }
-                  else{
-                    numbers[i] = atan(double.parse(numbers[i])).toString();
-                  }
+                else if(operators[i] == 'sin' && isButtonDisabled){
+                  numbers[i] = asin(double.parse(numbers[i])).toString();
                   if(operators.isNotEmpty){
                     operators.removeAt(i);
                   }
                 }
               }
-              print(expression);
-              print(numbers);
-              print(operators);
+
+              for(int i = 0; i < operators.length; i++){
+                if(operators[i] == 'cos' && !isButtonDisabled){
+                  numbers[i] = cos(double.parse(numbers[i])).toString();
+                  if(operators.isNotEmpty){
+                    operators.removeAt(i);
+                  }
+                }
+                else if(operators[i] == 'cos' && isButtonDisabled){
+                  numbers[i] = acos(double.parse(numbers[i])).toString();
+                  if(operators.isNotEmpty){
+                    operators.removeAt(i);
+                  }
+                }
+              }
+
+              for(int i = 0; i < operators.length; i++){
+                if(operators[i] == 'tan' && !isButtonDisabled){
+                  numbers[i] = tan(double.parse(numbers[i])).toString();
+                  if(operators.isNotEmpty){
+                    operators.removeAt(i);
+                  }
+                }
+                else if(operators[i] == 'tan' && isButtonDisabled){
+                  numbers[i] = atan(double.parse(numbers[i])).toString();
+                  if(operators.isNotEmpty){
+                    operators.removeAt(i);
+                  }
+                }
+              }
+
               for(int i = 0; i < operators.length; i++){
                 if(operators[i] == '!'){
                   numbers[i] = factorial(int.parse(numbers[i])).toString();
@@ -216,9 +187,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
                   }
                 }
               }
-              print(expression);
-              print(numbers);
-              print(operators);
+
               for(int i = 0; i < operators.length; i++){
                 if(operators[i] == '^'){
                   numbers[i] = pow(double.parse(numbers[i]), double.parse(numbers[i+1])).toString();
@@ -273,6 +242,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
                   i--;
                 }
               }
+
             }
 
             numbers[0] = double.parse(numbers[0]).toString();
@@ -280,7 +250,6 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
               numbers[0] = double.parse(numbers[0]).toInt().toString();
             }
             result = numbers[0];
-          }
         }
         catch(e){
           result = ':(';
@@ -301,15 +270,23 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
       }
 
       else if(buttonText == 'sin' || buttonText == '   -1 sin'){
-        expression += 's';
+        expression += ' sin';
       }
 
       else if(buttonText == 'cos' || buttonText == '   -1 cos'){
-        expression += 'c';
+        expression += ' cos';
       }
 
       else if(buttonText == 'tan' || buttonText == '   -1 tan'){
-        expression += 't';
+        expression += ' tan';
+      }
+
+      else if(buttonText == 'ln'){
+        expression += ' ln';
+      }
+
+      else if(buttonText == 'log'){
+        expression += ' log';
       }
 
       else{
@@ -320,6 +297,20 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
         }
         else if(buttonText == '🌟'){
 
+        }
+
+        else if(!(buttonText.codeUnitAt(0) >= 48 && buttonText.codeUnitAt(0) <= 57) && buttonText != '.'){
+          try{
+            if((buttonText == '-' || buttonText == '+') && (expression[expression.length - 1] == '-') || expression[expression.length - 1] == '+'){
+              expression += buttonText + ' ';
+            }
+            else{
+              expression += ' ' + buttonText;
+            }
+          }
+          catch(e){
+            expression += buttonText;
+          }
         }
 
         else{
@@ -333,13 +324,12 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
     HapticFeedback.heavyImpact();
     setState(() {
       if(buttonText.toUpperCase() == 'C'){
-        expression = '0';
+        expression = '';
         result = '';
       }
       else if(buttonText == '='){
         try{
-          pos.clear();
-          re = RegExp('[^0-9.]');
+          re = RegExp('[^0-9.-]');
           numbers = expression.split(re);
           for(int i = 0; i < numbers.length; i++){
             if(!numbers.remove('')){
@@ -347,42 +337,38 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
             }
           }
           result = numbers[0];
-          re = RegExp('[0-9.()]*');
+          re = RegExp('[0-9(). ]');
           operators = expression.split(re);
+
+          numbers.removeWhere((number) => number == '' || number == '-' || number == '--' || number == '+-' || number == '-+');
+          operators.removeWhere((operator) => operator == '');
+
           for(int i = 0; i < operators.length; i++){
-            if(!operators.remove('')){
-              break;
+            if(operators[i] == '--' || operators[i] == '++'){
+              operators[i] = '+';
+            }
+            else if(operators[i] == '+-' || operators[i] == '-+'){
+              operators[i] = '-';
+            }
+            else if(operators[i] == '-'){
+              if(i == 0){
+                operators.removeAt(i);
+              }
+              else{
+                if(operators[i-1] != '^'){
+                  operators[i] = '+';
+                }
+                else{
+                  operators.removeAt(i);
+                }
+              }
             }
           }
 
-          int others = 0;
-          for(int i = 0; i<expression.length; i++){
-            if(i > 0 && !(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57) && !(expression.codeUnitAt(i-1) >= 48 && expression.codeUnitAt(i-1) <= 57) || expression[i] == 's' || expression[i] == 'c' || expression[i] == 't'){
-              pos.add(i-others);
-            }
-            else if(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57 || expression[i] == '.' && expression[i] != '(' && expression[i] != ')'){
-              others++;
-            }
-          }
-
-          for(int i=0; i<pos.length; i++){
-            if(operators[pos[i]-i] == '-'){
-              operators.removeAt(pos[i]-i);
-              numbers[pos[i]-i] = (-1 * double.parse(numbers[pos[i]-i])).toString();
-            }
-          }
-
-          while(numbers.length > 1){
-
+          while((numbers.length > 1) || operators.isNotEmpty){
             for(int i = 0; i < operators.length; i++){
               if(operators[i] == '√'){
-                if(i==0){
-                  numbers[i] = sqrt(double.parse(numbers[i+1])).toString();
-                  numbers.removeAt(i+1);
-                }
-                else{
-                  numbers[i] = sqrt(double.parse(numbers[i])).toString();
-                }
+                numbers[i] = sqrt(double.parse(numbers[i])).toString();
                 if(operators.isNotEmpty){
                   operators.removeAt(i);
                 }
@@ -390,28 +376,8 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
             }
 
             for(int i = 0; i < operators.length; i++){
-              if(operators[i] == 's' && !isButtonDisabled){
-                if(i==0){
-                  numbers[i] = sin(double.parse(numbers[i+1])).toString();
-                  numbers.removeAt(i+1);
-                }
-                else{
-                  numbers[i] = sin(double.parse(numbers[i])).toString();
-                }
-                if(operators.isNotEmpty){
-                  operators.removeAt(i);
-                }
-              }
-              else if(operators[i] == 's' && isButtonDisabled){
-                if(i==0){
-
-                  numbers[i] = asin(double.parse(numbers[i+1])).toString();
-
-                  numbers.removeAt(i+1);
-                }
-                else{
-                  numbers[i] = asin(double.parse(numbers[i])).toString();
-                }
+              if(operators[i] == 'ln'){
+                numbers[i] = log(double.parse(numbers[i])).toString();
                 if(operators.isNotEmpty){
                   operators.removeAt(i);
                 }
@@ -419,26 +385,8 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
             }
 
             for(int i = 0; i < operators.length; i++){
-              if(operators[i] == 'c' && !isButtonDisabled){
-                if(i==0){
-                  numbers[i] = cos(double.parse(numbers[i+1])).toString();
-                  numbers.removeAt(i+1);
-                }
-                else{
-                  numbers[i] = cos(double.parse(numbers[i])).toString();
-                }
-                if(operators.isNotEmpty){
-                  operators.removeAt(i);
-                }
-              }
-              else if(operators[i] == 'c' && isButtonDisabled){
-                if(i==0){
-                  numbers[i] = acos(double.parse(numbers[i+1])).toString();
-                  numbers.removeAt(i+1);
-                }
-                else{
-                  numbers[i] = acos(double.parse(numbers[i])).toString();
-                }
+              if(operators[i] == 'log'){
+                numbers[i] = (log(double.parse(numbers[i])) * 0.434294189774).toString();
                 if(operators.isNotEmpty){
                   operators.removeAt(i);
                 }
@@ -446,26 +394,14 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
             }
 
             for(int i = 0; i < operators.length; i++){
-              if(operators[i] == 't' && !isButtonDisabled){
-                if(i==0){
-                  numbers[i] = tan(double.parse(numbers[i+1])).toString();
-                  numbers.removeAt(i+1);
-                }
-                else{
-                  numbers[i] = tan(double.parse(numbers[i])).toString();
-                }
+              if(operators[i] == 'sin' && !isButtonDisabled){
+                numbers[i] = sin(double.parse(numbers[i])).toString();
                 if(operators.isNotEmpty){
                   operators.removeAt(i);
                 }
               }
-              else if(operators[i] == 't' && isButtonDisabled){
-                if(i==0){
-                  numbers[i] = atan(double.parse(numbers[i+1])).toString();
-                  numbers.removeAt(i+1);
-                }
-                else{
-                  numbers[i] = atan(double.parse(numbers[i])).toString();
-                }
+              else if(operators[i] == 'sin' && isButtonDisabled){
+                numbers[i] = asin(double.parse(numbers[i])).toString();
                 if(operators.isNotEmpty){
                   operators.removeAt(i);
                 }
@@ -473,8 +409,29 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
             }
 
             for(int i = 0; i < operators.length; i++){
-              if(operators[i] == '!'){
-                numbers[i] = factorial(int.parse(numbers[i])).toString();
+              if(operators[i] == 'cos' && !isButtonDisabled){
+                numbers[i] = cos(double.parse(numbers[i])).toString();
+                if(operators.isNotEmpty){
+                  operators.removeAt(i);
+                }
+              }
+              else if(operators[i] == 'cos' && isButtonDisabled){
+                numbers[i] = acos(double.parse(numbers[i])).toString();
+                if(operators.isNotEmpty){
+                  operators.removeAt(i);
+                }
+              }
+            }
+
+            for(int i = 0; i < operators.length; i++){
+              if(operators[i] == 'tan' && !isButtonDisabled){
+                numbers[i] = tan(double.parse(numbers[i])).toString();
+                if(operators.isNotEmpty){
+                  operators.removeAt(i);
+                }
+              }
+              else if(operators[i] == 'tan' && isButtonDisabled){
+                numbers[i] = atan(double.parse(numbers[i])).toString();
                 if(operators.isNotEmpty){
                   operators.removeAt(i);
                 }
@@ -544,12 +501,14 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
                 i--;
               }
             }
+
           }
+
           numbers[0] = double.parse(numbers[0]).toString();
           if(double.parse(numbers[0]) == (double.parse(numbers[0])).toInt()){
             numbers[0] = double.parse(numbers[0]).toInt().toString();
           }
-          expression = '0' + numbers[0];
+          expression = numbers[0];
           result = '';
         }
         catch(e){
@@ -628,7 +587,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children:  [
                   Visibility(visible: isVisible,child: Container(padding: const EdgeInsets.fromLTRB(0, 0, 30.0, 10.0), alignment: Alignment.centerRight,child: Text(angleFormat.toUpperCase(), style: GoogleFonts.nunito(fontSize: 15,), maxLines: 2,))),
-                  Container(padding: const EdgeInsets.fromLTRB(0, 0, 30.0, 10.0), alignment: Alignment.centerRight,child: AutoSizeText(expression.substring(1, expression.length), style: GoogleFonts.nunito(fontSize: expressionFontSize,), maxLines: 2,)),
+                  Container(padding: const EdgeInsets.fromLTRB(0, 0, 30.0, 10.0), alignment: Alignment.centerRight,child: AutoSizeText(expression, style: GoogleFonts.nunito(fontSize: expressionFontSize,), maxLines: 2,)),
                   Container(padding: const EdgeInsets.fromLTRB(0, 0, 30.0, 10.0),alignment: Alignment.centerRight,child: AutoSizeText(result, style: GoogleFonts.nunito(fontSize: resultFontSize), maxLines: 1,)),
                 ],
               ),
@@ -672,7 +631,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Visibility(visible: isVisible, child: Expanded(child: buildButton('D', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,)),
+                        Visibility(visible: isVisible, child: Expanded(child: buildButton('ln', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,)),
                         Expanded(child: buildButton('7', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
                         Expanded(child: buildButton('8', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
                         Expanded(child: buildButton('9', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
@@ -698,7 +657,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Visibility(visible: isVisible, child: Expanded(child: buildButton('D', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,)),
+                        Visibility(visible: isVisible, child: Expanded(child: buildButton('log', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,)),
                         Expanded(child: buildButton('1', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
                         Expanded(child: buildButton('2', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
                         Expanded(child: buildButton('3', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
