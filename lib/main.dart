@@ -38,7 +38,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
   var pos = [];
   bool isVisible = false;
   double buttonSize = 70;
-  String angleformat = 'rad';
+  String angleFormat = 'rad';
   bool isRad = true;
   double deg = 1;
 
@@ -87,7 +87,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
           int others = 0;
 
           for(int i = 0; i<expression.length; i++){
-            if(i > 0 && !(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57) && !(expression.codeUnitAt(i-1) >= 48 && expression.codeUnitAt(i-1) <= 57) && expression[i] == 's' && expression[i] == 'c' && expression[i] == 't'){
+            if(i > 0 && !(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57) && !(expression.codeUnitAt(i-1) >= 48 && expression.codeUnitAt(i-1) <= 57) || expression[i] == 's' || expression[i] == 'c' || expression[i] == 't'){
               pos.add(i-others);
             }
             else if(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57 || expression[i] == '.' && expression[i] != '(' && expression[i] != ')'){
@@ -255,7 +255,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
           expression += buttonText;
           }
         }
-        else if(buttonText == '🌟'){
+        if(buttonText == '🌟'){
 
         }
 
@@ -295,7 +295,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
           int others = 0;
 
           for(int i = 0; i<expression.length; i++){
-            if(i > 0 && !(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57) && !(expression.codeUnitAt(i-1) >= 48 && expression.codeUnitAt(i-1) <= 57) && expression[i] == 's' && expression[i] == 'c' && expression[i] == 't'){
+            if(i > 0 && !(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57) && !(expression.codeUnitAt(i-1) >= 48 && expression.codeUnitAt(i-1) <= 57) || expression[i] == 's' || expression[i] == 'c' || expression[i] == 't'){
               pos.add(i-others);
             }
             else if(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57 || expression[i] == '.' && expression[i] != '(' && expression[i] != ')'){
@@ -449,14 +449,14 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
 
   angleButton(String buttonText){
     setState(() {
-      if(angleformat == 'rad'){
-        angleformat = 'deg';
+      if(angleFormat == 'rad'){
+        angleFormat = 'deg';
         isRad = !isRad;
         deg = 57.295779513;
       }
 
       else{
-        angleformat = 'rad';
+        angleFormat = 'rad';
         isRad = !isRad;
         deg = 1;
       }
@@ -468,7 +468,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
   }
 
   Widget buildAngleButton(String buttonText, double buttonMeasurement, Color buttonColor, Color textColor){
-    return ElevatedButton(onPressed: () => angleButton(buttonText), child: Container(height: buttonMeasurement, width: buttonMeasurement, alignment: Alignment.center, child: Text(buttonText, style: GoogleFonts.nunito(color: textColor, fontSize: 20)),), style: ElevatedButton.styleFrom(shape: const CircleBorder(), primary: buttonColor, onPrimary: textColor, elevation: 0.0));
+    return ElevatedButton(onPressed: () => angleButton(buttonText), child: Container(height: buttonMeasurement, width: buttonMeasurement, alignment: Alignment.center, child: Text(buttonText, style: GoogleFonts.nunito(color: textColor, fontSize: 20)),), style: ElevatedButton.styleFrom(shape: const CircleBorder(side: BorderSide(color: Colors.blueAccent, width: 1)), primary: buttonColor, onPrimary: textColor, elevation: 0.0));
   }
 
   @override
@@ -526,7 +526,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Expanded(child: buildAngleButton(angleformat, buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                          Expanded(child: buildAngleButton(angleFormat, buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
                           Expanded(child: buildButton('sin', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
                           Expanded(child: buildButton('cos', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
                           Expanded(child: buildButton('tan', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
@@ -580,7 +580,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Expanded(child: buildButton('/>', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
-                        Visibility(visible: isVisible, child: Expanded(child: buildButton('D', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,)),
+                        Visibility(visible: isVisible, child: Expanded(child: buildButton('00', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,)),
                         Expanded(child: buildButton('0', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
                         Expanded(child: buildButton('.', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
                         Expanded(child: buildButton('🌟', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
