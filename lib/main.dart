@@ -41,6 +41,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
   String angleFormat = 'rad';
   bool isRad = true;
   double deg = 1;
+  bool isButtonDisabled = false;
 
   int factorial(int number){
     if(number != 0){
@@ -105,13 +106,13 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
           while(numbers.length != 1 || operators.isNotEmpty){
 
             for(int i = 0; i < operators.length; i++){
-              if(operators[i] == 's'){
+              if(operators[i] == '√'){
                 if(i==0){
-                  numbers[i] = sin(int.parse(numbers[i+1]) / deg).toString();
+                  numbers[i] = sqrt(double.parse(numbers[i+1])).toString();
                   numbers.removeAt(i+1);
                 }
                 else{
-                  numbers[i] = sin(int.parse(numbers[i]) / deg).toString();
+                  numbers[i] = sqrt(double.parse(numbers[i])).toString();
                 }
                 if(operators.isNotEmpty){
                   operators.removeAt(i);
@@ -120,13 +121,27 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
             }
 
             for(int i = 0; i < operators.length; i++){
-              if(operators[i] == 'c'){
+              if(operators[i] == 's' && !isButtonDisabled){
                 if(i==0){
-                  numbers[i] = cos(int.parse(numbers[i+1]) / deg).toString();
+                  numbers[i] = sin(double.parse(numbers[i+1])).toString();
                   numbers.removeAt(i+1);
                 }
                 else{
-                  numbers[i] = cos(int.parse(numbers[i]) / deg).toString();
+                  numbers[i] = sin(double.parse(numbers[i])).toString();
+                }
+                if(operators.isNotEmpty){
+                  operators.removeAt(i);
+                }
+              }
+              else if(operators[i] == 's' && isButtonDisabled){
+                if(i==0){
+
+                  numbers[i] = asin(double.parse(numbers[i+1])).toString();
+
+                  numbers.removeAt(i+1);
+                }
+                else{
+                  numbers[i] = asin(double.parse(numbers[i])).toString();
                 }
                 if(operators.isNotEmpty){
                   operators.removeAt(i);
@@ -135,13 +150,52 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
             }
 
             for(int i = 0; i < operators.length; i++){
-              if(operators[i] == 't'){
+              if(operators[i] == 'c' && !isButtonDisabled){
                 if(i==0){
-                  numbers[i] = tan(int.parse(numbers[i+1]) / deg).toString();
+                  numbers[i] = cos(double.parse(numbers[i+1])).toString();
                   numbers.removeAt(i+1);
                 }
                 else{
-                  numbers[i] = tan(int.parse(numbers[i]) / deg).toString();
+                  numbers[i] = cos(double.parse(numbers[i])).toString();
+                }
+                if(operators.isNotEmpty){
+                  operators.removeAt(i);
+                }
+              }
+              else if(operators[i] == 'c' && isButtonDisabled){
+                if(i==0){
+                  numbers[i] = acos(double.parse(numbers[i+1])).toString();
+                  numbers.removeAt(i+1);
+                }
+                else{
+                  numbers[i] = acos(double.parse(numbers[i])).toString();
+                }
+                if(operators.isNotEmpty){
+                  operators.removeAt(i);
+                }
+              }
+            }
+
+            for(int i = 0; i < operators.length; i++){
+              if(operators[i] == 't' && !isButtonDisabled){
+                if(i==0){
+                  numbers[i] = tan(double.parse(numbers[i+1])).toString();
+                  numbers.removeAt(i+1);
+                }
+                else{
+                  numbers[i] = tan(double.parse(numbers[i])).toString();
+                }
+                if(operators.isNotEmpty){
+                  operators.removeAt(i);
+                }
+              }
+              else if(operators[i] == 't' && isButtonDisabled){
+                if(i==0){
+                  numbers[i] = atan(double.parse(numbers[i+1])).toString();
+                  numbers.removeAt(i+1);
+                }
+                else{
+                  numbers[i] = atan(double.parse(numbers[i])).toString();
                 }
                 if(operators.isNotEmpty){
                   operators.removeAt(i);
@@ -237,15 +291,15 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
         }
       }
 
-      else if(buttonText == 'sin'){
+      else if(buttonText == 'sin' || buttonText == '   -1 sin'){
         expression += 's';
       }
 
-      else if(buttonText == 'cos'){
+      else if(buttonText == 'cos' || buttonText == '   -1 cos'){
         expression += 'c';
       }
 
-      else if(buttonText == 'tan'){
+      else if(buttonText == 'tan' || buttonText == '   -1 tan'){
         expression += 't';
       }
 
@@ -293,7 +347,6 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
           }
 
           int others = 0;
-
           for(int i = 0; i<expression.length; i++){
             if(i > 0 && !(expression.codeUnitAt(i) >= 48 && expression.codeUnitAt(i) <= 57) && !(expression.codeUnitAt(i-1) >= 48 && expression.codeUnitAt(i-1) <= 57) || expression[i] == 's' || expression[i] == 'c' || expression[i] == 't'){
               pos.add(i-others);
@@ -313,13 +366,13 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
           while(numbers.length != 1 || operators.isNotEmpty){
 
             for(int i = 0; i < operators.length; i++){
-              if(operators[i] == 's'){
+              if(operators[i] == '√'){
                 if(i==0){
-                  numbers[i] = sin(int.parse(numbers[i+1]) / deg).toString();
+                  numbers[i] = sqrt(double.parse(numbers[i+1])).toString();
                   numbers.removeAt(i+1);
                 }
                 else{
-                  numbers[i] = sin(int.parse(numbers[i]) / deg).toString();
+                  numbers[i] = sqrt(double.parse(numbers[i])).toString();
                 }
                 if(operators.isNotEmpty){
                   operators.removeAt(i);
@@ -328,13 +381,27 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
             }
 
             for(int i = 0; i < operators.length; i++){
-              if(operators[i] == 'c'){
+              if(operators[i] == 's' && !isButtonDisabled){
                 if(i==0){
-                  numbers[i] = cos(int.parse(numbers[i+1]) / deg).toString();
+                  numbers[i] = sin(double.parse(numbers[i+1])).toString();
                   numbers.removeAt(i+1);
                 }
                 else{
-                  numbers[i] = cos(int.parse(numbers[i]) / deg).toString();
+                  numbers[i] = sin(double.parse(numbers[i])).toString();
+                }
+                if(operators.isNotEmpty){
+                  operators.removeAt(i);
+                }
+              }
+              else if(operators[i] == 's' && isButtonDisabled){
+                if(i==0){
+
+                  numbers[i] = asin(double.parse(numbers[i+1])).toString();
+
+                  numbers.removeAt(i+1);
+                }
+                else{
+                  numbers[i] = asin(double.parse(numbers[i])).toString();
                 }
                 if(operators.isNotEmpty){
                   operators.removeAt(i);
@@ -343,13 +410,52 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
             }
 
             for(int i = 0; i < operators.length; i++){
-              if(operators[i] == 't'){
+              if(operators[i] == 'c' && !isButtonDisabled){
                 if(i==0){
-                  numbers[i] = tan(int.parse(numbers[i+1]) / deg).toString();
+                  numbers[i] = cos(double.parse(numbers[i+1])).toString();
                   numbers.removeAt(i+1);
                 }
                 else{
-                  numbers[i] = tan(int.parse(numbers[i]) / deg).toString();
+                  numbers[i] = cos(double.parse(numbers[i])).toString();
+                }
+                if(operators.isNotEmpty){
+                  operators.removeAt(i);
+                }
+              }
+              else if(operators[i] == 'c' && isButtonDisabled){
+                if(i==0){
+                  numbers[i] = acos(double.parse(numbers[i+1])).toString();
+                  numbers.removeAt(i+1);
+                }
+                else{
+                  numbers[i] = acos(double.parse(numbers[i])).toString();
+                }
+                if(operators.isNotEmpty){
+                  operators.removeAt(i);
+                }
+              }
+            }
+
+            for(int i = 0; i < operators.length; i++){
+              if(operators[i] == 't' && !isButtonDisabled){
+                if(i==0){
+                  numbers[i] = tan(double.parse(numbers[i+1])).toString();
+                  numbers.removeAt(i+1);
+                }
+                else{
+                  numbers[i] = tan(double.parse(numbers[i])).toString();
+                }
+                if(operators.isNotEmpty){
+                  operators.removeAt(i);
+                }
+              }
+              else if(operators[i] == 't' && isButtonDisabled){
+                if(i==0){
+                  numbers[i] = atan(double.parse(numbers[i+1])).toString();
+                  numbers.removeAt(i+1);
+                }
+                else{
+                  numbers[i] = atan(double.parse(numbers[i])).toString();
                 }
                 if(operators.isNotEmpty){
                   operators.removeAt(i);
@@ -447,7 +553,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
     });
   }
 
-  angleButton(String buttonText){
+  angleButtonPressed(String buttonText){
     setState(() {
       if(angleFormat == 'rad'){
         angleFormat = 'deg';
@@ -463,12 +569,28 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
     });
   }
 
+  arcButtonPressed(String buttonText){
+    setState(() {
+      if(buttonText == 'deg'){
+      angleFormat = 'rad';
+      isRad = !isRad;
+      deg = 1;
+      }
+      isButtonDisabled = !isButtonDisabled;
+    });
+
+  }
+
   Widget buildButton(String buttonText, double buttonMeasurement, Color buttonColor, Color textColor){
     return ElevatedButton(onPressed: () => buttonPressed(buttonText), onLongPress: () => buttonLongPress(buttonText), child: Container(height: buttonMeasurement, width: buttonMeasurement, alignment: Alignment.center, child: Text(buttonText, style: GoogleFonts.nunito(color: textColor, fontSize: 20)),), style: ElevatedButton.styleFrom(shape: const CircleBorder(), primary: buttonColor, onPrimary: textColor, elevation: 0.0));
   }
 
   Widget buildAngleButton(String buttonText, double buttonMeasurement, Color buttonColor, Color textColor){
-    return ElevatedButton(onPressed: () => angleButton(buttonText), child: Container(height: buttonMeasurement, width: buttonMeasurement, alignment: Alignment.center, child: Text(buttonText, style: GoogleFonts.nunito(color: textColor, fontSize: 20)),), style: ElevatedButton.styleFrom(shape: const CircleBorder(side: BorderSide(color: Colors.blueAccent, width: 1)), primary: buttonColor, onPrimary: textColor, elevation: 0.0));
+    return ElevatedButton(onPressed: isButtonDisabled ? null : () => angleButtonPressed(buttonText), child: Container(height: buttonMeasurement, width: buttonMeasurement, alignment: Alignment.center, child: Text(buttonText, style: GoogleFonts.nunito(color: textColor, fontSize: 20)),), style: ElevatedButton.styleFrom(shape: const CircleBorder(side: BorderSide(color: Colors.blueAccent, width: 1)), primary: buttonColor, onPrimary: textColor, elevation: 0.0));
+  }
+
+  Widget buildArcButton(String buttonText, double buttonMeasurement, Color buttonColor, Color textColor){
+    return ElevatedButton(onPressed: () => arcButtonPressed(angleFormat), child: Container(height: buttonMeasurement, width: buttonMeasurement, alignment: Alignment.center, child: Text(buttonText, style: GoogleFonts.nunito(color: textColor, fontSize: 13)),), style: ElevatedButton.styleFrom(shape: const CircleBorder(), primary: buttonColor, onPrimary: textColor, elevation: 0.0));
   }
 
   @override
@@ -496,6 +618,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children:  [
+                  Visibility(visible: isVisible,child: Container(padding: const EdgeInsets.fromLTRB(0, 0, 30.0, 10.0), alignment: Alignment.centerRight,child: Text(angleFormat.toUpperCase(), style: GoogleFonts.nunito(fontSize: 15,), maxLines: 2,))),
                   Container(padding: const EdgeInsets.fromLTRB(0, 0, 30.0, 10.0), alignment: Alignment.centerRight,child: AutoSizeText(expression.substring(1, expression.length), style: GoogleFonts.nunito(fontSize: expressionFontSize,), maxLines: 2,)),
                   Container(padding: const EdgeInsets.fromLTRB(0, 0, 30.0, 10.0),alignment: Alignment.centerRight,child: AutoSizeText(result, style: GoogleFonts.nunito(fontSize: resultFontSize), maxLines: 1,)),
                 ],
@@ -527,10 +650,10 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Expanded(child: buildAngleButton(angleFormat, buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
-                          Expanded(child: buildButton('sin', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
-                          Expanded(child: buildButton('cos', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
-                          Expanded(child: buildButton('tan', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
-                          Expanded(child: buildButton('D', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                          Expanded(child: buildButton(isButtonDisabled ? '   -1 sin' : 'sin', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                          Expanded(child: buildButton(isButtonDisabled ? '   -1 cos' : 'cos', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                          Expanded(child: buildButton(isButtonDisabled ? '   -1 tan' : 'tan', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
+                          Expanded(child: buildArcButton('-1', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
                         ],
                       ),
                     ),
@@ -553,7 +676,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Visibility(visible: isVisible, child: Expanded(child: buildButton('D', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,)),
+                        Visibility(visible: isVisible, child: Expanded(child: buildButton('√', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,)),
                         Expanded(child: buildButton('4', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
                         Expanded(child: buildButton('5', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
                         Expanded(child: buildButton('6', buttonSize, Colors.white10, Colors.blueAccent), flex: 1,),
