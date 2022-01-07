@@ -80,8 +80,6 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
 
           numbers.removeWhere((number) => number == '' || number == '-' || number == '--' || number == '+-' || number == '-+');
           operators.removeWhere((operator) => operator == '');
-          print(numbers);
-          print(operators);
 
           for(int i = 0; i < operators.length; i++){
             if(operators[i] == '--' || operators[i] == '++'){
@@ -92,7 +90,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
             }
             else if(operators[i] == '-'){
               if(i == 0){
-                operators.removeAt(i);
+                operators[i] = '+';
               }
               else{
                 if(operators[i-1] != '^'){
@@ -104,8 +102,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
               }
             }
           }
-          print(numbers);
-          print(operators);
+
             while((numbers.length > 1) || operators.isNotEmpty){
               for(int i = 0; i < operators.length; i++){
                 if(operators[i] == '√'){
@@ -352,7 +349,7 @@ class _CalculatorAppState extends State<CalculatorApp> with WidgetsBindingObserv
             }
             else if(operators[i] == '-'){
               if(i == 0){
-                operators.removeAt(i);
+                operators[i] = '+';
               }
               else{
                 if(operators[i-1] != '^'){
