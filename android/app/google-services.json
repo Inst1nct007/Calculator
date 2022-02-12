@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "5263581460",
+    "project_id": "calculator-691fe3",
+    "storage_bucket": "calculator-691fe3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:5263581460:android:1701b8bb2376c7b1f82201",
+        "android_client_info": {
+          "package_name": "com.king.calculator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "5263581460-gd1b40s8c0fi3gm96kkmh57vljre020m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJOpOce7seD-Ok43og1CPBrxa3LkbwB-Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "5263581460-gd1b40s8c0fi3gm96kkmh57vljre020m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
