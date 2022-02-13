@@ -1,5 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:calculator/pages/settings.dart';
+import 'package:calculator/services/authentication.dart';
+import 'package:calculator/services/firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:glass_kit/glass_kit.dart';
 import '../providers/mathprovider.dart';
@@ -15,17 +19,20 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   late AnimationController controller;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  late int points;
 
   void settingButton() async {
     controller.forward();
-    await Future.delayed(Duration(milliseconds: 390));
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Settings()));
+    await Future.delayed(Duration(milliseconds: 350));
+    await Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));
     controller.reverse();
   }
 
   @override
   void initState() {
     super.initState();
+    points = 0;
     controller = AnimationController(vsync: this, duration: Duration(milliseconds: 300));
   }
 
@@ -49,7 +56,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               );
             },
           ),
-        title: Text('Points ✨'),
+        title: PointWidget(),
         centerTitle: true,
         flexibleSpace: Container(
           decoration: BoxDecoration(

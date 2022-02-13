@@ -2,13 +2,21 @@ import 'package:calculator/pages/signIn.dart';
 import 'package:calculator/services/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
-class Settings extends StatelessWidget {
-  const Settings({Key? key}) : super(key: key);
+class SettingsPage extends StatelessWidget {
+  const SettingsPage({Key? key}) : super(key: key);
+
+  void onShare() async {
+    await Share.share('Check this out!! https://youtu.be/dQw4w9WgXcQ', subject: 'Look what I made!').then((value) => print('Shared!'));
+  }
 
   @override
   Widget build(BuildContext context) {
     Authentication authentication = Provider.of<Authentication>(context);
+    String? userName = authentication.auth.currentUser?.displayName;
+    String? userEmail = authentication.auth.currentUser?.email;
+    String? userPhoto = authentication.auth.currentUser?.photoURL;
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings'),
@@ -31,12 +39,52 @@ class Settings extends StatelessWidget {
         child: ListView(
           children: [
             ListTile(
-              title: Text('Sign Out'),
-              subtitle: Text('Sign Out of the App'),
-              trailing: Icon(Icons.logout),
+              title: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Text(userName!),
+              ),
+              subtitle: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Text(userEmail!),
+              ),
+              trailing: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Image.network(userPhoto!),
+              ),
+            ),
+            ListTile(
+              title: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Text('Share'),
+              ),
+              subtitle: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Text('Get 50 Points!'),
+              ),
+              trailing: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Icon(Icons.share),
+              ),
               onTap: (){
-                authentication.signOut();
+                onShare();
+              },
+            ),
+            ListTile(
+              title: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Text('Sign Out'),
+              ),
+              subtitle: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Text('Sign Out of the App'),
+              ),
+              trailing: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: Icon(Icons.logout),
+              ),
+              onTap: (){
                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignIn()));
+                authentication.signOut();
               },
             ),
           ],

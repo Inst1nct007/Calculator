@@ -1,3 +1,4 @@
+import 'package:calculator/services/firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:glass_kit/glass_kit.dart';
@@ -79,6 +80,23 @@ class _ButtonWidgetState extends State<ButtonWidget> with SingleTickerProviderSt
             ),
           );
         },
+    );
+  }
+}
+
+class PointWidget extends StatelessWidget {
+  PointWidget({Key? key}) : super(key: key);
+  FirestoreDatabase database = FirestoreDatabase();
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: database.fetchData(),
+      builder: (context, AsyncSnapshot<int> snapshot){
+        if(snapshot.hasData){
+          return Text('${snapshot.data} ✨');
+        }
+        return Text(' ✨');
+      },
     );
   }
 }

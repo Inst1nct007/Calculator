@@ -24,13 +24,6 @@ void main() async {
   );
 }
 
-/*class CalculatorApp extends StatefulWidget {
-  const CalculatorApp({Key? key}) : super(key: key);
-
-  @override
-  State<CalculatorApp> createState() => _CalculatorAppState();
-}*/
-
 class CalculatorApp extends StatelessWidget {
   const CalculatorApp({Key? key}) : super(key: key);
 
