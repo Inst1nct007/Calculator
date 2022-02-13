@@ -42,6 +42,7 @@ class _ButtonWidgetState extends State<ButtonWidget> with SingleTickerProviderSt
               padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 3),
               child: GestureDetector(
                 onTap: () async {
+                  HapticFeedback.lightImpact();
                   animationTween = Tween(begin: 1, end: 1.1).animate(animationController);
                   animationController.forward();
                   await Future.delayed(Duration(milliseconds: 40));
@@ -85,15 +86,19 @@ class _ButtonWidgetState extends State<ButtonWidget> with SingleTickerProviderSt
 }
 
 class PointWidget extends StatelessWidget {
-  PointWidget({Key? key}) : super(key: key);
-  FirestoreDatabase database = FirestoreDatabase();
+  final FirestoreDatabase database;
+  const PointWidget(this.database, {Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: database.fetchData(),
       builder: (context, AsyncSnapshot<int> snapshot){
-        if(snapshot.hasData){
-          return Text('${snapshot.data} ✨');
+        if(snapshot.hasData && snapshot.data! > 5){
+          return Text('${snapshot.data}✨', style: TextStyle(fontSize: 22, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),);
+        }
+        else if(snapshot.hasData && snapshot.data! <= 5){
+          return Text('${snapshot.data}✨', style: TextStyle(color: Colors.redAccent, fontSize: 24, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),);
         }
         return Text(' ✨');
       },

@@ -1,3 +1,4 @@
+import 'package:calculator/services/firestore.dart';
 import 'package:calculator/services/math_functions.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,8 @@ class Math with ChangeNotifier {
   String angleFormat = 'rad';
   bool isButtonEnabled = true;
 
-  void updateExpression(BuildContext context, String buttonText) {
+  void updateExpression(BuildContext context, String buttonText) async {
+    FirestoreDatabase database = FirestoreDatabase();
     if (buttonText == 'C') {
       if (expression.isNotEmpty) {
         expression = expression.substring(0, expression.length - 1);
@@ -21,11 +23,15 @@ class Math with ChangeNotifier {
       notifyListeners();
     }
     else if (buttonText == '=') {
-      expressionSize = 65;
-      resultSize = 50;
-      result = MathFunctions.calculate(expression, result, angleFormat).toString();
+      int point = await database.fetchData();
+      if(point > 0){
+        expressionSize = 65;
+        resultSize = 50;
+        result = MathFunctions.calculate(expression, result, angleFormat).toString();
       if (double.parse(result) == (double.parse(result)).toInt()) {
         result = double.parse(result).toInt().toString();
+      }
+      await database.removePoint();
       }
     }
     else if (buttonText == '/>') {
@@ -101,14 +107,6 @@ class Math with ChangeNotifier {
       result = '';
       expressionSize = 65;
       resultSize = 50;
-    }
-    else if (buttonText == '=') {
-      result = MathFunctions.calculate(expression, result, angleFormat).toString();
-      if (double.parse(result) == (double.parse(result)).toInt()) {
-        result = double.parse(result).toInt().toString();
-      }
-      expressionSize = 50;
-      resultSize = 65;
     }
     notifyListeners();
   }

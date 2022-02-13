@@ -10,17 +10,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(
-    MultiProvider(
-        providers: [
-          ChangeNotifierProvider<Authentication>(
-            create: (_) => Authentication(),
-          ),
-          ChangeNotifierProvider(
-            create: (_) => Math(),
-          ),
-        ],
+    ChangeNotifierProvider(
+      create: (_) => Math(),
       child: CalculatorApp(),
-    )
+    ),
   );
 }
 
@@ -29,7 +22,7 @@ class CalculatorApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Authentication authentication = Provider.of<Authentication>(context);
+    Authentication authentication = Authentication();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: authentication.isSignedIn ? HomePage() : SignIn(),

@@ -1,11 +1,10 @@
 import 'package:calculator/services/firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class Authentication extends ChangeNotifier{
+class Authentication{
   FirebaseAuth auth = FirebaseAuth.instance;
-  bool get isSignedIn => auth.currentUser != null;
+  bool isSignedIn = false;
 
   Future<void> googleSignIn() async {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -15,8 +14,15 @@ class Authentication extends ChangeNotifier{
       idToken: googleAuth?.idToken,
     );
     await auth.signInWithCredential(credential);
+    isSignedIn = true;
     FirestoreDatabase database = FirestoreDatabase();
-    database.fetchData();
+    bool existance = await database.checkIfUserExists();
+    if(existance){
+      database.fetchData();
+    }
+    else{
+      database.addData();
+    }
   }
 
   void signOut() async {

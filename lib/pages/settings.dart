@@ -1,7 +1,6 @@
 import 'package:calculator/pages/signIn.dart';
 import 'package:calculator/services/authentication.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -13,7 +12,7 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Authentication authentication = Provider.of<Authentication>(context);
+    Authentication authentication = Authentication();
     String? userName = authentication.auth.currentUser?.displayName;
     String? userEmail = authentication.auth.currentUser?.email;
     String? userPhoto = authentication.auth.currentUser?.photoURL;

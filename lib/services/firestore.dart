@@ -1,24 +1,46 @@
 import 'package:calculator/services/authentication.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 
 class FirestoreDatabase{
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  Authentication auth = Authentication();
   int points = 0;
+  Authentication auth = Authentication();
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  Future<bool> checkIfUserExists() async {
+    CollectionReference collectionReference = firestore.collection('users');
+    DocumentSnapshot documentSnapshot = await collectionReference.doc(auth
+        .getCurrentUser()
+        ?.uid).get();
+    return documentSnapshot.exists;
+  }
 
   addData() async {
-    await firestore.collection('users').where('users', isEqualTo: auth.getCurrentUser()?.uid).get();
+    CollectionReference collectionReference = firestore.collection('users');
+    DocumentSnapshot documentSnapshot = await collectionReference.doc(auth.getCurrentUser()?.uid).get();
     await firestore.collection('users').doc(auth.getCurrentUser()?.uid).set({
-      'points': 0
+      'points': 1
     });
+    points = await fetchData();
   }
 
   Future<int> fetchData() async {
-    CollectionReference collectionReference = await firestore.collection('users');
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    CollectionReference collectionReference = firestore.collection('users');
     DocumentSnapshot documentSnapshot = await collectionReference.doc(auth.getCurrentUser()?.uid).get();
     var data = documentSnapshot.data() as Map;
     points = await data['points'];
     return points;
+  }
+
+  removePoint() async {
+    points = await fetchData();
+    CollectionReference collectionReference = firestore.collection('users');
+    await collectionReference.doc(auth.getCurrentUser()?.uid).update({'points': points-1});
+  }
+
+  addAdPoint() async {
+    points = await fetchData();
+    CollectionReference collectionReference = firestore.collection('users');
+    await collectionReference.doc(auth.getCurrentUser()?.uid).update({'points': points+20});
   }
 }

@@ -1,12 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:calculator/pages/settings.dart';
-import 'package:calculator/services/authentication.dart';
-import 'package:calculator/services/firestore.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:glass_kit/glass_kit.dart';
 import '../providers/mathprovider.dart';
+import '../services/firestore.dart';
 import '../widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -19,7 +16,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   late AnimationController controller;
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  FirestoreDatabase database = FirestoreDatabase();
   late int points;
 
   void settingButton() async {
@@ -56,7 +53,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               );
             },
           ),
-        title: PointWidget(),
+        title: PointWidget(database),
         centerTitle: true,
         flexibleSpace: Container(
           decoration: BoxDecoration(
@@ -71,9 +68,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           ),
         ),
         elevation: 0,
-        actions: [
-
-        ],
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -175,8 +169,19 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               flex: 6,
             ),
             GestureDetector(
-                onTap: (){
-                  print('Get Ads!',);
+                onTap: () async {
+                  FirestoreDatabase database = FirestoreDatabase();
+                  int points = await database.fetchData();
+                  if(points < 60){
+                    await database.addAdPoint();
+                  }
+                  else{
+                    const snackBar = SnackBar(content: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Text('Don\'t you have enough points already? XD',),
+                    ));
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
                 },
                 child: GlassContainer(
                   height: MediaQuery.of(context).size.height / 12,
@@ -196,7 +201,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   elevation: 5.0,
                   isFrostedGlass: false,
                   shadowColor: Colors.red.withOpacity(0.20),
-                  child: Center(child: AnimatedContainer(duration: Duration(seconds: 3), child: Text('Get More Points! ✨', style: TextStyle(color: Colors.indigoAccent, fontSize: 20, fontWeight: FontWeight.bold),))),
+                  child: Center(child: Text('Get Extra Points! ✨', style: TextStyle(color: Colors.indigoAccent, fontSize: 20, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),)),
                 ),
               ),
           ],
