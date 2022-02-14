@@ -33,6 +33,12 @@ class Math with ChangeNotifier {
       }
       await database.removePoint();
       }
+      else{
+        const snackBar = SnackBar(content: Text('You need more Points!✨', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600,)),
+          backgroundColor: Colors.red,
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
     }
     else if (buttonText == '/>') {
       if (!isVisible) {

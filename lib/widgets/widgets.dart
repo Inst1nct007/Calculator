@@ -50,7 +50,7 @@ class _ButtonWidgetState extends State<ButtonWidget> with SingleTickerProviderSt
                   animationController.reverse();
                 },
                 onLongPress: () async {
-                  HapticFeedback.heavyImpact();
+                  HapticFeedback.mediumImpact();
                   animationTween = Tween(begin: 1, end: 1.15).animate(animationController);
                   animationController.forward();
                   await Future.delayed(Duration(milliseconds: 70));

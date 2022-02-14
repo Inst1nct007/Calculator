@@ -1,11 +1,15 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:calculator/pages/settings.dart';
+import 'package:calculator/services/ad_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:glass_kit/glass_kit.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../providers/mathprovider.dart';
 import '../services/firestore.dart';
 import '../widgets/widgets.dart';
 import 'package:provider/provider.dart';
+
+const int maxFailedLoadAttempts = 3;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -18,6 +22,36 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   late AnimationController controller;
   FirestoreDatabase database = FirestoreDatabase();
   late int points;
+  InterstitialAd? interstitialAd;
+  bool isBottomInterstitialAdLoaded = false;
+  int interstitialLoadAttempts = 0;
+
+  void showInterstitialAd(){
+    if(interstitialAd != null){
+      interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+          onAdDismissedFullScreenContent: (InterstitialAd ad){
+            ad.dispose();
+            createInterstitialAd();
+          },
+          onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error){
+            ad.dispose();
+            createInterstitialAd();
+          });
+      interstitialAd!.show();
+    }
+  }
+
+  void createInterstitialAd(){
+    InterstitialAd.load(adUnitId: AdHelper.interstitialAdUnitId, request: AdRequest(), adLoadCallback: InterstitialAdLoadCallback(onAdLoaded: (InterstitialAd ad){
+      interstitialAd = ad;
+      interstitialLoadAttempts = 0;
+    },
+        onAdFailedToLoad: (LoadAdError error){
+      interstitialLoadAttempts += 1;
+          interstitialAd = null;
+          interstitialLoadAttempts <= maxFailedLoadAttempts ? createInterstitialAd() : null;
+        }));
+  }
 
   void settingButton() async {
     controller.forward();
@@ -29,6 +63,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   @override
   void initState() {
     super.initState();
+    createInterstitialAd();
     points = 0;
     controller = AnimationController(vsync: this, duration: Duration(milliseconds: 300));
   }
@@ -36,6 +71,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   @override
   void dispose() {
     controller.dispose();
+    interstitialAd?.dispose();
     super.dispose();
   }
 
@@ -173,13 +209,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   FirestoreDatabase database = FirestoreDatabase();
                   int points = await database.fetchData();
                   if(points < 60){
+                    showInterstitialAd();
                     await database.addAdPoint();
                   }
                   else{
                     const snackBar = SnackBar(content: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Text('Don\'t you have enough points already? XD',),
-                    ));
+                      child: Text('Don\'t you have enough points already? XD', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
+                    ), backgroundColor: Colors.greenAccent,);
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   }
                 },
