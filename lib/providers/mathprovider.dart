@@ -65,14 +65,14 @@ class Math with ChangeNotifier {
           ),
           content: GestureDetector(
             onTap: () {
-              print('App Store! Yay!');
+              //Todo Have to give the link to play store app
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+              children: const [
                 Text('Rate Us on App Store?', style: TextStyle(fontSize: 15)),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  padding: EdgeInsets.symmetric(horizontal: 5),
                   child: Text('Rate!!', style: TextStyle(fontSize: 16,
                       decoration: TextDecoration.underline,
                       color: Colors.greenAccent)),

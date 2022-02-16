@@ -2,7 +2,7 @@
     package="com.king.calculator">
     <uses-permission android:name="android.permission.VIBRATE"/>
    <application
-        android:label="calculator"
+        android:label="calci"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

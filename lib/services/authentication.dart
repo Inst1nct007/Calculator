@@ -25,8 +25,9 @@ class Authentication{
     }
   }
 
-  void signOut() async {
+  signOut() async {
     await auth.signOut();
+    isSignedIn = false;
   }
 
   User? getCurrentUser() {

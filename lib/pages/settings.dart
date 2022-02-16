@@ -1,3 +1,4 @@
+import 'package:calculator/pages/about.dart';
 import 'package:calculator/pages/signIn.dart';
 import 'package:calculator/services/authentication.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,7 @@ class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
 
   void onShare() async {
-    await Share.share('Check this out!! https://youtu.be/dQw4w9WgXcQ', subject: 'Look what I made!').then((value) => print('Shared!'));
+    await Share.share('Check this out!! https://youtu.be/dQw4w9WgXcQ', subject: 'Look what I made!');
   }
 
   @override
@@ -18,10 +19,10 @@ class SettingsPage extends StatelessWidget {
     String? userPhoto = authentication.auth.currentUser?.photoURL;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: const Text('Settings'),
         centerTitle: true,
         flexibleSpace: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
                 colors: [
                   Color(0xffb9fbc0),
@@ -52,16 +53,16 @@ class SettingsPage extends StatelessWidget {
               ),
             ),
             ListTile(
-              title: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
+              title: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15),
                 child: Text('Share'),
               ),
-              subtitle: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Text('Get 50 Points!'),
+              subtitle: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: Text('Share with others for no reason!'),
               ),
-              trailing: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+              trailing: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Icon(Icons.share),
               ),
               onTap: (){
@@ -69,21 +70,39 @@ class SettingsPage extends StatelessWidget {
               },
             ),
             ListTile(
-              title: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
+              title: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: Text('About'),
+              ),
+              subtitle: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: Text('Story of this App!'),
+              ),
+              trailing: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: Icon(Icons.stream),
+              ),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => About()));
+              },
+            ),
+            ListTile(
+              title: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15),
                 child: Text('Sign Out'),
               ),
-              subtitle: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
+              subtitle: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15),
                 child: Text('Sign Out of the App'),
               ),
-              trailing: Padding(
+              trailing: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15),
                 child: Icon(Icons.logout),
               ),
-              onTap: (){
+              onTap: () async {
+                await authentication.signOut();
+                Navigator.pop(context);
                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignIn()));
-                authentication.signOut();
               },
             ),
           ],

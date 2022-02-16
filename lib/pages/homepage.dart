@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   }
 
   void createInterstitialAd(){
-    InterstitialAd.load(adUnitId: AdHelper.interstitialAdUnitId, request: AdRequest(), adLoadCallback: InterstitialAdLoadCallback(onAdLoaded: (InterstitialAd ad){
+    InterstitialAd.load(adUnitId: AdHelper.interstitialAdUnitId, request: const AdRequest(), adLoadCallback: InterstitialAdLoadCallback(onAdLoaded: (InterstitialAd ad){
       interstitialAd = ad;
       interstitialLoadAttempts = 0;
     },
@@ -55,8 +55,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   void settingButton() async {
     controller.forward();
-    await Future.delayed(Duration(milliseconds: 350));
-    await Navigator.push(context, MaterialPageRoute(builder: (context) => SettingsPage()));
+    await Future.delayed(const Duration(milliseconds: 350));
+    await Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsPage()));
     controller.reverse();
   }
 
@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     super.initState();
     createInterstitialAd();
     points = 0;
-    controller = AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+    controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
   }
 
   @override
@@ -85,14 +85,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             builder: (context, child) {
               return Transform.rotate(
                 angle: controller.value * 2.2,
-                child: IconButton(icon: Icon(Icons.settings), onPressed: () {settingButton();},),
+                child: IconButton(icon: const Icon(Icons.settings), onPressed: () {settingButton();},),
               );
             },
           ),
         title: PointWidget(database),
         centerTitle: true,
         flexibleSpace: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [
                 Color(0xffb9fbc0),
@@ -108,7 +108,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
         /*gradient: LinearGradient(
         colors: [
           Color(0xffccdbfd),
@@ -125,9 +125,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Visibility(visible: math.isVisible, child: Container(padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),alignment: Alignment.centerRight, child: AutoSizeText(math.angleFormat.toUpperCase(), style: TextStyle(), maxLines: 1,)),),
-                    Container(padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8), alignment: Alignment.centerRight,child: AutoSizeText(math.result, style: TextStyle(fontSize: math.resultSize, color: Colors.blueAccent), maxLines: 1,)),
-                    Container(padding: EdgeInsets.symmetric(horizontal: 8), alignment: Alignment.centerRight,child: AutoSizeText(math.expression, style: TextStyle(fontSize: math.expressionSize, color: Colors.blueAccent), maxLines: 2,)),
+                    Visibility(visible: math.isVisible, child: Container(padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),alignment: Alignment.centerRight, child: AutoSizeText(math.angleFormat.toUpperCase(), style: const TextStyle(), maxLines: 1,)),),
+                    Container(padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8), alignment: Alignment.centerRight,child: AutoSizeText(math.result, style: TextStyle(fontSize: math.resultSize, color: Colors.blueAccent), maxLines: 1,)),
+                    Container(padding: const EdgeInsets.symmetric(horizontal: 8), alignment: Alignment.centerRight,child: AutoSizeText(math.expression, style: TextStyle(fontSize: math.expressionSize, color: Colors.blueAccent), maxLines: 2,)),
                   ],
                 ),
               ),
@@ -140,11 +140,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ButtonWidget(buttonText: 'C',),
-                        Visibility(visible: math.isVisible, child: ButtonWidget(buttonText: 'x!',)),
-                        ButtonWidget(buttonText: '/',),
-                        ButtonWidget(buttonText: 'x',),
-                        ButtonWidget(buttonText: '=',),
+                        const ButtonWidget(buttonText: 'C',),
+                        Visibility(visible: math.isVisible, child: const ButtonWidget(buttonText: 'x!',)),
+                        const ButtonWidget(buttonText: '/',),
+                        const ButtonWidget(buttonText: 'x',),
+                        const ButtonWidget(buttonText: '=',),
                       ],
                     ),
                   Visibility(
@@ -153,51 +153,51 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           ButtonWidget(buttonText: math.angleFormat,),
-                          ButtonWidget(buttonText: 'sin',),
-                          ButtonWidget(buttonText: 'cos',),
-                          ButtonWidget(buttonText: 'tan',),
-                          ButtonWidget(buttonText: 'x⁻¹',),
+                          const ButtonWidget(buttonText: 'sin',),
+                          const ButtonWidget(buttonText: 'cos',),
+                          const ButtonWidget(buttonText: 'tan',),
+                          const ButtonWidget(buttonText: 'x⁻¹',),
                         ],
                       ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Visibility(visible: math.isVisible, child: ButtonWidget(buttonText: 'ln',)),
-                      ButtonWidget(buttonText: '7',),
-                      ButtonWidget(buttonText: '8',),
-                      ButtonWidget(buttonText: '9',),
-                      ButtonWidget(buttonText: '+',),
+                      Visibility(visible: math.isVisible, child: const ButtonWidget(buttonText: 'ln',)),
+                      const ButtonWidget(buttonText: '7',),
+                      const ButtonWidget(buttonText: '8',),
+                      const ButtonWidget(buttonText: '9',),
+                      const ButtonWidget(buttonText: '+',),
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Visibility(visible: math.isVisible, child: ButtonWidget(buttonText: '√x',)),
-                      ButtonWidget(buttonText: '4',),
-                      ButtonWidget(buttonText: '5',),
-                      ButtonWidget(buttonText: '6',),
-                      ButtonWidget(buttonText: '-',),
+                      Visibility(visible: math.isVisible, child: const ButtonWidget(buttonText: '√x',)),
+                      const ButtonWidget(buttonText: '4',),
+                      const ButtonWidget(buttonText: '5',),
+                      const ButtonWidget(buttonText: '6',),
+                      const ButtonWidget(buttonText: '-',),
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Visibility(visible: math.isVisible, child: ButtonWidget(buttonText: 'log',)),
-                      ButtonWidget(buttonText: '1',),
-                      ButtonWidget(buttonText: '2',),
-                      ButtonWidget(buttonText: '3',),
-                      ButtonWidget(buttonText: '^',),
+                      Visibility(visible: math.isVisible, child: const ButtonWidget(buttonText: 'log',)),
+                      const ButtonWidget(buttonText: '1',),
+                      const ButtonWidget(buttonText: '2',),
+                      const ButtonWidget(buttonText: '3',),
+                      const ButtonWidget(buttonText: '^',),
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ButtonWidget(buttonText: '/>',),
-                      ButtonWidget(buttonText: '0',),
-                      ButtonWidget(buttonText: '00',),
-                      ButtonWidget(buttonText: '.',),
-                      Visibility(visible: math.isVisible, child: ButtonWidget(buttonText: '👌',)),
+                      const ButtonWidget(buttonText: '/>',),
+                      const ButtonWidget(buttonText: '0',),
+                      const ButtonWidget(buttonText: '00',),
+                      const ButtonWidget(buttonText: '.',),
+                      Visibility(visible: math.isVisible, child: const ButtonWidget(buttonText: '👌',)),
                     ],
                   ),
                 ],
@@ -223,7 +223,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 child: GlassContainer(
                   height: MediaQuery.of(context).size.height / 12,
                   width: MediaQuery.of(context).size.width,
-                  gradient: LinearGradient(
+                  gradient: const LinearGradient(
                     colors: [
                       Color(0xffabc4ff),
                       Color(0xffedf2fb),
@@ -238,7 +238,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   elevation: 5.0,
                   isFrostedGlass: false,
                   shadowColor: Colors.red.withOpacity(0.20),
-                  child: Center(child: Text('Get Extra Points! ✨', style: TextStyle(color: Colors.indigoAccent, fontSize: 20, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),)),
+                  child: const Center(child: Text('Get Extra Points! ✨', style: TextStyle(color: Colors.indigoAccent, fontSize: 20, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),)),
                 ),
               ),
           ],
