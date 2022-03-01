@@ -77,7 +77,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       print('paused');
       final math = Provider.of<Math>(context, listen: false);
       math.updatePoints();
-      //Todo Fetch Data from Firestore
     }
     super.didChangeAppLifecycleState(state);
   }
