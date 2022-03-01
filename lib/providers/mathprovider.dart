@@ -13,32 +13,22 @@ class Math with ChangeNotifier {
   double fontSize = 23;
   String angleFormat = 'rad';
   bool isButtonEnabled = true;
+  int supportPoints = 0;
 
   void updateExpression(BuildContext context, String buttonText) async {
-    FirestoreDatabase database = FirestoreDatabase();
     if (buttonText == 'C') {
       if (expression.isNotEmpty) {
         expression = expression.substring(0, expression.length - 1);
       }
-      notifyListeners();
     }
     else if (buttonText == '=') {
-      int point = await database.fetchData();
-      if(point > 0){
         expressionSize = 65;
         resultSize = 50;
         result = MathFunctions.calculate(expression, result, angleFormat).toString();
       if (double.parse(result) == (double.parse(result)).toInt()) {
         result = double.parse(result).toInt().toString();
       }
-      await database.removePoint();
-      }
-      else{
-        const snackBar = SnackBar(content: Text('You need more Points!✨', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600,)),
-          backgroundColor: Colors.red,
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      }
+      supportPoints += 2;
     }
     else if (buttonText == '/>') {
       if (!isVisible) {
@@ -53,7 +43,6 @@ class Math with ChangeNotifier {
         fontSize = 23;
         isVisible = !isVisible;
       }
-      notifyListeners();
     }
     else if (buttonText == '👌') {
       var snackBar = SnackBar(
@@ -79,7 +68,8 @@ class Math with ChangeNotifier {
                 ),
               ],
             ),
-          ));
+          ),
+      );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
     else if (buttonText == angleFormat) {
@@ -89,7 +79,6 @@ class Math with ChangeNotifier {
       else {
         angleFormat = 'rad';
       }
-      notifyListeners();
     }
     else {
       if(buttonText == 'x!'){
@@ -104,7 +93,6 @@ class Math with ChangeNotifier {
       expression += buttonText;
     }
     notifyListeners();
-
   }
 
   void updateExpressionLongPressed(String buttonText) {
@@ -114,6 +102,26 @@ class Math with ChangeNotifier {
       expressionSize = 65;
       resultSize = 50;
     }
+    else if (buttonText == '=') {
+      result = MathFunctions.calculate(expression, result, angleFormat).toString();
+      if (double.parse(result) == (double.parse(result)).toInt()) {
+        result = double.parse(result).toInt().toString();
+      }
+      expressionSize = 50;
+      resultSize = 65;
+      supportPoints += 2;
+    }
+    else if(int.parse(buttonText) >= 0 && int.parse(buttonText) <= 9){
+      buttonText = '$buttonText$buttonText$buttonText';
+      expression += buttonText;
+    }
+    notifyListeners();
+  }
+
+  updatePoints() async {
+    FirestoreDatabase database = FirestoreDatabase();
+    await database.removePoint(supportPoints);
+    supportPoints = 0;
     notifyListeners();
   }
 }

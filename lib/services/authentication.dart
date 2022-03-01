@@ -14,15 +14,19 @@ class Authentication{
       idToken: googleAuth?.idToken,
     );
     await auth.signInWithCredential(credential);
-    isSignedIn = true;
     FirestoreDatabase database = FirestoreDatabase();
     bool existance = await database.checkIfUserExists();
     if(existance){
-      database.fetchData();
+      await database.fetchData();
     }
     else{
-      database.addData();
+      await database.addData();
     }
+    auth.authStateChanges().listen((User? user) {
+      if(user != null){
+        isSignedIn = true;
+      }
+    });
   }
 
   signOut() async {

@@ -15,8 +15,6 @@ class FirestoreDatabase{
   }
 
   addData() async {
-    CollectionReference collectionReference = firestore.collection('users');
-    DocumentSnapshot documentSnapshot = await collectionReference.doc(auth.getCurrentUser()?.uid).get();
     await firestore.collection('users').doc(auth.getCurrentUser()?.uid).set({
       'points': 1
     });
@@ -32,15 +30,15 @@ class FirestoreDatabase{
     return points;
   }
 
-  removePoint() async {
+  removePoint(int point) async {
     points = await fetchData();
     CollectionReference collectionReference = firestore.collection('users');
-    await collectionReference.doc(auth.getCurrentUser()?.uid).update({'points': points-2});
+    await collectionReference.doc(auth.getCurrentUser()?.uid).update({'points': points - point});
   }
 
   addAdPoint() async {
     points = await fetchData();
     CollectionReference collectionReference = firestore.collection('users');
-    await collectionReference.doc(auth.getCurrentUser()?.uid).update({'points': points+15});
+    await collectionReference.doc(auth.getCurrentUser()?.uid).update({'points': points + 5});
   }
 }

@@ -18,13 +18,15 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late AnimationController controller;
   FirestoreDatabase database = FirestoreDatabase();
-  late int points;
   InterstitialAd? interstitialAd;
   bool isBottomInterstitialAdLoaded = false;
   int interstitialLoadAttempts = 0;
+
+  late int supportPoints;
+  late String supportLvl;
 
   void showInterstitialAd(){
     if(interstitialAd != null){
@@ -64,17 +66,28 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   void initState() {
     super.initState();
     createInterstitialAd();
-    points = 0;
     controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
+    WidgetsBinding.instance?.addObserver(this);
+    //showInterstitialAd();
   }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if(state == AppLifecycleState.paused){
+      print('paused');
+      final math = Provider.of<Math>(context, listen: false);
+      math.updatePoints();
+      //Todo Fetch Data from Firestore
+    }
+    super.didChangeAppLifecycleState(state);
+  }
   @override
   void dispose() {
     controller.dispose();
     interstitialAd?.dispose();
+    WidgetsBinding.instance?.removeObserver(this);
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     final math = Provider.of<Math>(context);
@@ -164,30 +177,30 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Visibility(visible: math.isVisible, child: const ButtonWidget(buttonText: 'ln',)),
+                      const ButtonWidget(buttonText: '+',),
                       const ButtonWidget(buttonText: '7',),
                       const ButtonWidget(buttonText: '8',),
                       const ButtonWidget(buttonText: '9',),
-                      const ButtonWidget(buttonText: '+',),
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Visibility(visible: math.isVisible, child: const ButtonWidget(buttonText: '√x',)),
+                      const ButtonWidget(buttonText: '-',),
                       const ButtonWidget(buttonText: '4',),
                       const ButtonWidget(buttonText: '5',),
                       const ButtonWidget(buttonText: '6',),
-                      const ButtonWidget(buttonText: '-',),
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Visibility(visible: math.isVisible, child: const ButtonWidget(buttonText: 'log',)),
+                      const ButtonWidget(buttonText: '^',),
                       const ButtonWidget(buttonText: '1',),
                       const ButtonWidget(buttonText: '2',),
                       const ButtonWidget(buttonText: '3',),
-                      const ButtonWidget(buttonText: '^',),
                     ],
                   ),
                   Row(
@@ -208,17 +221,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 onTap: () async {
                   FirestoreDatabase database = FirestoreDatabase();
                   int points = await database.fetchData();
-                  if(points < 60){
                     showInterstitialAd();
                     await database.addAdPoint();
-                  }
-                  else{
-                    const snackBar = SnackBar(content: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Text('Don\'t you have enough points already? XD', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
-                    ), backgroundColor: Colors.greenAccent,);
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  }
                 },
                 child: GlassContainer(
                   height: MediaQuery.of(context).size.height / 12,

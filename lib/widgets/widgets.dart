@@ -1,5 +1,6 @@
 import 'package:calculator/services/firestore.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter/services.dart';
 import 'package:glass_kit/glass_kit.dart';
 import 'package:provider/provider.dart';
@@ -43,18 +44,18 @@ class _ButtonWidgetState extends State<ButtonWidget> with SingleTickerProviderSt
               child: GestureDetector(
                 onTap: () async {
                   HapticFeedback.lightImpact();
-                  animationTween = Tween(begin: 1, end: 1.1).animate(animationController);
-                  animationController.forward();
-                  await Future.delayed(Duration(milliseconds: 40));
+                  animationTween = Tween(begin: 1, end: 1.12).animate(animationController);
                   math.updateExpression(context, widget.buttonText);
+                  animationController.forward();
+                  await Future.delayed(Duration(milliseconds: 185));
                   animationController.reverse();
                 },
                 onLongPress: () async {
                   HapticFeedback.mediumImpact();
                   animationTween = Tween(begin: 1, end: 1.15).animate(animationController);
-                  animationController.forward();
-                  await Future.delayed(Duration(milliseconds: 70));
                   math.updateExpressionLongPressed(widget.buttonText);
+                  animationController.forward();
+                  await Future.delayed(Duration(milliseconds: 165));
                   animationController.reverse();
                 },
                 child: GlassContainer(
@@ -94,13 +95,21 @@ class PointWidget extends StatelessWidget {
     return FutureBuilder(
       future: database.fetchData(),
       builder: (context, AsyncSnapshot<int> snapshot){
-        if(snapshot.hasData && snapshot.data! > 5){
-          return Text('${snapshot.data}✨', style: TextStyle(fontSize: 22, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),);
+        if(snapshot.hasData){
+          if(snapshot.data! < 10){
+            return const Text('Support Lvl: Low', style: TextStyle(fontSize: 22, fontStyle: FontStyle.normal, fontWeight: FontWeight.w600),);
+          }
+          else if(snapshot.data! >= 10 && snapshot.data! < 90){
+            return const Text('Support Lvl: Mid', style: TextStyle(fontSize: 22, fontStyle: FontStyle.italic, fontWeight: FontWeight.w500),);
+          }
+          else{
+            return const Text('Support Lvl: High!', style: TextStyle(fontSize: 22, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),);
+          }
         }
-        else if(snapshot.hasData && snapshot.data! <= 5){
+        /*else if(snapshot.hasData && snapshot.data! <= 5){
           return Text('${snapshot.data}✨', style: TextStyle(color: Colors.redAccent, fontSize: 24, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),);
-        }
-        return Text(' ✨');
+        }*/
+        return const Text('');
       },
     );
   }

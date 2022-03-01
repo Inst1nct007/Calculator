@@ -72,10 +72,10 @@ android {
             signingConfig signingConfigs.release
         }
     }
+}
 
-    flutter {
-        source '../..'
-    }
+flutter {
+    source '../..'
 }
 
 dependencies {

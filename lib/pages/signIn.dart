@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:calculator/pages/homepage.dart';
 import 'package:calculator/services/authentication.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +6,7 @@ import 'package:flutter/material.dart';
 class SignIn extends StatelessWidget {
   SignIn({Key? key}) : super(key: key);
   final Authentication authentication = Authentication();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +38,12 @@ class SignIn extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () async {
-            authentication.googleSignIn().whenComplete(() => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage())));
+            await authentication.googleSignIn().whenComplete(() {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HomePage()));
+                  });
 
           },
           child: Container(

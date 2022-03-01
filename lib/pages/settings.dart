@@ -8,7 +8,7 @@ class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
 
   void onShare() async {
-    await Share.share('Check this out!! https://youtu.be/dQw4w9WgXcQ', subject: 'Look what I made!');
+    await Share.share('Check this out!! https://play.google.com/store/apps/details?id=com.king.calculator', subject: 'Look what I found!');
   }
 
   @override
@@ -59,7 +59,7 @@ class SettingsPage extends StatelessWidget {
               ),
               subtitle: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15),
-                child: Text('Share with others for no reason!'),
+                child: Text('Share for no reason!'),
               ),
               trailing: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10),
