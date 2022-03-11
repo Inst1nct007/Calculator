@@ -1,6 +1,7 @@
 import 'package:calculator/services/firestore.dart';
 import 'package:calculator/services/math_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Math with ChangeNotifier {
   String expression = '';
@@ -46,6 +47,11 @@ class Math with ChangeNotifier {
     }
     else if (buttonText == '👌') {
       var snackBar = SnackBar(
+        behavior: SnackBarBehavior.floating,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30)),
+          ),
+          //Todo Change Background Color
           action: SnackBarAction(
             label: 'Undo',
             onPressed: () {
@@ -53,8 +59,11 @@ class Math with ChangeNotifier {
             },
           ),
           content: GestureDetector(
-            onTap: () {
-              //Todo Have to give the link to play store app
+            onTap: () async {
+              const url = 'https://play.google.com/store/apps/details?id=com.king.calculator';
+              if (await canLaunch(url)) {
+              await launch(url);
+              }
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

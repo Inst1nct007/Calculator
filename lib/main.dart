@@ -1,6 +1,7 @@
 import 'package:calculator/pages/homepage.dart';
 import 'package:calculator/pages/signIn.dart';
 import 'package:calculator/providers/mathprovider.dart';
+import 'package:calculator/providers/themeprovider.dart';
 import 'package:calculator/services/authentication.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -12,10 +13,17 @@ void main() async {
   await Firebase.initializeApp();
   MobileAds.instance.initialize();
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => Math(),
-      child: CalculatorApp(),
+    MultiProvider(providers: [
+      ChangeNotifierProvider(
+        create: (_) => Math(),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => AppTheme(),
+      ),
+    ],
+      child: const CalculatorApp(),
     ),
+
   );
 }
 
@@ -27,7 +35,7 @@ class CalculatorApp extends StatelessWidget {
     Authentication authentication = Authentication();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: authentication.isSignedIn ? HomePage() : SignIn(),
+      home: authentication.isSignedIn ? const HomePage() : SignIn(),
     );
   }
 }

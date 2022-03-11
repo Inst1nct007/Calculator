@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:glass_kit/glass_kit.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../providers/mathprovider.dart';
+import '../providers/themeprovider.dart';
 import '../services/firestore.dart';
 import '../widgets/widgets.dart';
 import 'package:provider/provider.dart';
@@ -74,7 +75,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if(state == AppLifecycleState.paused){
-      print('paused');
       final math = Provider.of<Math>(context, listen: false);
       math.updatePoints();
     }
@@ -90,6 +90,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     final math = Provider.of<Math>(context);
+    final appTheme = Provider.of<AppTheme>(context);
+
     return Scaffold(
       appBar: AppBar(
         leading: AnimatedBuilder(
@@ -104,11 +106,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         title: PointWidget(database),
         centerTitle: true,
         flexibleSpace: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                Color(0xffb9fbc0),
-                Color(0xff72efdd),
+                appTheme.AppBarGradientcolorOne,
+                appTheme.AppBarGradientcolorTwo,
               ],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter
@@ -138,8 +140,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Visibility(visible: math.isVisible, child: Container(padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),alignment: Alignment.centerRight, child: AutoSizeText(math.angleFormat.toUpperCase(), style: const TextStyle(), maxLines: 1,)),),
-                    Container(padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8), alignment: Alignment.centerRight,child: AutoSizeText(math.result, style: TextStyle(fontSize: math.resultSize, color: Colors.blueAccent), maxLines: 1,)),
-                    Container(padding: const EdgeInsets.symmetric(horizontal: 8), alignment: Alignment.centerRight,child: AutoSizeText(math.expression, style: TextStyle(fontSize: math.expressionSize, color: Colors.blueAccent), maxLines: 2,)),
+                    Container(padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8), alignment: Alignment.centerRight,child: AutoSizeText(math.result, style: TextStyle(fontSize: math.resultSize, color: appTheme.textColor), maxLines: 1,)),
+                    Container(padding: const EdgeInsets.symmetric(horizontal: 8), alignment: Alignment.centerRight,child: AutoSizeText(math.expression, style: TextStyle(fontSize: math.expressionSize, color: appTheme.textColor), maxLines: 2,)),
                   ],
                 ),
               ),
@@ -155,7 +157,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         const ButtonWidget(buttonText: 'C',),
                         Visibility(visible: math.isVisible, child: const ButtonWidget(buttonText: 'x!',)),
                         const ButtonWidget(buttonText: '/',),
-                        const ButtonWidget(buttonText: 'x',),
+                        const ButtonWidget(buttonText: '+',),
                         const ButtonWidget(buttonText: '=',),
                       ],
                     ),
@@ -176,7 +178,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Visibility(visible: math.isVisible, child: const ButtonWidget(buttonText: 'ln',)),
-                      const ButtonWidget(buttonText: '+',),
+                      const ButtonWidget(buttonText: 'x',),
                       const ButtonWidget(buttonText: '7',),
                       const ButtonWidget(buttonText: '8',),
                       const ButtonWidget(buttonText: '9',),
@@ -219,7 +221,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             GestureDetector(
                 onTap: () async {
                   FirestoreDatabase database = FirestoreDatabase();
-                  int points = await database.fetchData();
                     showInterstitialAd();
                     await database.addAdPoint();
                 },
@@ -241,7 +242,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   elevation: 5.0,
                   isFrostedGlass: false,
                   shadowColor: Colors.red.withOpacity(0.20),
-                  child: const Center(child: Text('Get Extra Points! ✨', style: TextStyle(color: Colors.indigoAccent, fontSize: 20, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),)),
+                  child: Center(child: Text('Support Us?', style: TextStyle(color: appTheme.textColor, fontSize: 20, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),)),
                 ),
               ),
           ],

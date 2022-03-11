@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:glass_kit/glass_kit.dart';
 import 'package:provider/provider.dart';
 import '../providers/mathprovider.dart';
+import '../providers/themeprovider.dart';
 
 class ButtonWidget extends StatefulWidget {
   final String buttonText;
@@ -21,7 +22,7 @@ class _ButtonWidgetState extends State<ButtonWidget> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 30));
+    animationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 30));
     animationTween = Tween(begin: 1, end: 1.1).animate(animationController);
   }
 
@@ -34,9 +35,12 @@ class _ButtonWidgetState extends State<ButtonWidget> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     final math = Provider.of<Math>(context);
+    final appTheme = Provider.of<AppTheme>(context);
     return AnimatedBuilder(
         animation: animationController.view,
         builder: (context, child){
+          var color1 = Colors.white.withOpacity(0.40);
+          var color2 = Colors.white70.withOpacity(0.10);
           return Transform.scale(
             scale: animationTween.value.toDouble(),
             child: Padding(
@@ -44,10 +48,10 @@ class _ButtonWidgetState extends State<ButtonWidget> with SingleTickerProviderSt
               child: GestureDetector(
                 onTap: () async {
                   HapticFeedback.lightImpact();
-                  animationTween = Tween(begin: 1, end: 1.12).animate(animationController);
+                  animationTween = Tween(begin: 1, end: 1.11).animate(animationController);
                   math.updateExpression(context, widget.buttonText);
                   animationController.forward();
-                  await Future.delayed(Duration(milliseconds: 185));
+                  await Future.delayed(const Duration(milliseconds: 185));
                   animationController.reverse();
                 },
                 onLongPress: () async {
@@ -55,7 +59,7 @@ class _ButtonWidgetState extends State<ButtonWidget> with SingleTickerProviderSt
                   animationTween = Tween(begin: 1, end: 1.15).animate(animationController);
                   math.updateExpressionLongPressed(widget.buttonText);
                   animationController.forward();
-                  await Future.delayed(Duration(milliseconds: 165));
+                  await Future.delayed(const Duration(milliseconds: 170));
                   animationController.reverse();
                 },
                 child: GlassContainer(
@@ -63,8 +67,8 @@ class _ButtonWidgetState extends State<ButtonWidget> with SingleTickerProviderSt
                   width: MediaQuery.of(context).size.width / math.widgetWidth,
                   gradient: LinearGradient(
                     colors: [
-                      Colors.white.withOpacity(0.40),
-                      Colors.white70.withOpacity(0.10),
+                      appTheme.ButtonBackgroundcolorOne,
+                      appTheme.ButtonBackgroundcolorTwo,
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
@@ -76,7 +80,7 @@ class _ButtonWidgetState extends State<ButtonWidget> with SingleTickerProviderSt
                   elevation: animationTween.value.toDouble(),
                   isFrostedGlass: false,
                   shadowColor: Colors.red.withOpacity(0.20),
-                  child: Center(child: Text(widget.buttonText, style: TextStyle(color: Colors.blueAccent, fontSize: math.fontSize, fontWeight: FontWeight.bold),)),
+                  child: Center(child: Text(widget.buttonText, style: TextStyle(color: appTheme.ButtonTextcolor, fontSize: math.fontSize, fontWeight: FontWeight.bold),)),
                 ),
               ),
             ),
@@ -106,9 +110,6 @@ class PointWidget extends StatelessWidget {
             return const Text('Support Lvl: High!', style: TextStyle(fontSize: 22, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),);
           }
         }
-        /*else if(snapshot.hasData && snapshot.data! <= 5){
-          return Text('${snapshot.data}✨', style: TextStyle(color: Colors.redAccent, fontSize: 24, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),);
-        }*/
         return const Text('');
       },
     );

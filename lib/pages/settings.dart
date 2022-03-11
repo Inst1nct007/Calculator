@@ -1,8 +1,12 @@
 import 'package:calculator/pages/about.dart';
 import 'package:calculator/pages/signIn.dart';
+import 'package:calculator/pages/themes.dart';
 import 'package:calculator/services/authentication.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+
+import '../providers/themeprovider.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -13,6 +17,7 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appTheme = Provider.of<AppTheme>(context);
     Authentication authentication = Authentication();
     String? userName = authentication.auth.currentUser?.displayName;
     String? userEmail = authentication.auth.currentUser?.email;
@@ -22,11 +27,11 @@ class SettingsPage extends StatelessWidget {
         title: const Text('Settings'),
         centerTitle: true,
         flexibleSpace: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
                 colors: [
-                  Color(0xffb9fbc0),
-                  Color(0xff72efdd),
+                  appTheme.AppBarGradientcolorOne,
+                  appTheme.AppBarGradientcolorTwo,
                 ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter
@@ -72,6 +77,23 @@ class SettingsPage extends StatelessWidget {
             ListTile(
               title: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15),
+                child: Text('Themes'),
+              ),
+              subtitle: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: Text('Explore Different Colors!'),
+              ),
+              trailing: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: Icon(Icons.animation),
+              ),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const Themes()));
+              },
+            ),
+            ListTile(
+              title: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15),
                 child: Text('About'),
               ),
               subtitle: const Padding(
@@ -83,7 +105,7 @@ class SettingsPage extends StatelessWidget {
                 child: Icon(Icons.stream),
               ),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => About()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const About()));
               },
             ),
             ListTile(
