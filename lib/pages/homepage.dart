@@ -6,7 +6,6 @@ import 'package:glass_kit/glass_kit.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../providers/mathprovider.dart';
 import '../providers/themeprovider.dart';
-import '../services/firestore.dart';
 import '../widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -21,7 +20,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late AnimationController controller;
-  FirestoreDatabase database = FirestoreDatabase();
   InterstitialAd? interstitialAd;
   bool isBottomInterstitialAdLoaded = false;
   int interstitialLoadAttempts = 0;
@@ -76,7 +74,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if(state == AppLifecycleState.paused){
       final math = Provider.of<Math>(context, listen: false);
-      math.updatePoints();
+      //Todo shared pref points
     }
     super.didChangeAppLifecycleState(state);
   }
@@ -103,7 +101,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               );
             },
           ),
-        title: PointWidget(database),
+        title: Text('Calculator', style: TextStyle(fontWeight: FontWeight.bold),),
         centerTitle: true,
         flexibleSpace: Container(
           decoration: BoxDecoration(
@@ -154,7 +152,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const ButtonWidget(buttonText: 'C',),
+                        const ButtonWidget(buttonText: '.',),
                         Visibility(visible: math.isVisible, child: const ButtonWidget(buttonText: 'x!',)),
                         const ButtonWidget(buttonText: '/',),
                         const ButtonWidget(buttonText: '+',),
@@ -210,7 +208,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                       const ButtonWidget(buttonText: '/>',),
                       const ButtonWidget(buttonText: '0',),
                       const ButtonWidget(buttonText: '00',),
-                      const ButtonWidget(buttonText: '.',),
+                      const ButtonWidget(buttonText: 'C',),
                       Visibility(visible: math.isVisible, child: const ButtonWidget(buttonText: '👌',)),
                     ],
                   ),
@@ -220,17 +218,15 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             ),
             GestureDetector(
                 onTap: () async {
-                  FirestoreDatabase database = FirestoreDatabase();
                     showInterstitialAd();
-                    await database.addAdPoint();
                 },
                 child: GlassContainer(
                   height: MediaQuery.of(context).size.height / 12,
                   width: MediaQuery.of(context).size.width,
-                  gradient: const LinearGradient(
+                  gradient: LinearGradient(
                     colors: [
-                      Color(0xffabc4ff),
-                      Color(0xffedf2fb),
+                      appTheme.supportBackgroundColorOne,
+                      appTheme.supportBackgroundColorTwo,
                     ],
                     begin: Alignment.bottomRight,
                     end: Alignment.topRight,

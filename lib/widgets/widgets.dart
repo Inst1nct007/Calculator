@@ -1,4 +1,3 @@
-import 'package:calculator/services/firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
@@ -86,32 +85,6 @@ class _ButtonWidgetState extends State<ButtonWidget> with SingleTickerProviderSt
             ),
           );
         },
-    );
-  }
-}
-
-class PointWidget extends StatelessWidget {
-  final FirestoreDatabase database;
-  const PointWidget(this.database, {Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: database.fetchData(),
-      builder: (context, AsyncSnapshot<int> snapshot){
-        if(snapshot.hasData){
-          if(snapshot.data! < 10){
-            return const Text('Support Lvl: Low', style: TextStyle(fontSize: 22, fontStyle: FontStyle.normal, fontWeight: FontWeight.w600),);
-          }
-          else if(snapshot.data! >= 10 && snapshot.data! < 90){
-            return const Text('Support Lvl: Mid', style: TextStyle(fontSize: 22, fontStyle: FontStyle.italic, fontWeight: FontWeight.w500),);
-          }
-          else{
-            return const Text('Support Lvl: High!', style: TextStyle(fontSize: 22, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),);
-          }
-        }
-        return const Text('');
-      },
     );
   }
 }

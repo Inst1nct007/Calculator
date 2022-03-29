@@ -1,4 +1,3 @@
-import 'package:calculator/services/firestore.dart';
 import 'package:calculator/services/math_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,8 +22,8 @@ class Math with ChangeNotifier {
       }
     }
     else if (buttonText == '=') {
-        expressionSize = 65;
-        resultSize = 50;
+        expressionSize = 50;
+        resultSize = 65;
         result = MathFunctions.calculate(expression, result, angleFormat).toString();
       if (double.parse(result) == (double.parse(result)).toInt()) {
         result = double.parse(result).toInt().toString();
@@ -124,13 +123,6 @@ class Math with ChangeNotifier {
       buttonText = '$buttonText$buttonText$buttonText';
       expression += buttonText;
     }
-    notifyListeners();
-  }
-
-  updatePoints() async {
-    FirestoreDatabase database = FirestoreDatabase();
-    await database.removePoint(supportPoints);
-    supportPoints = 0;
     notifyListeners();
   }
 }

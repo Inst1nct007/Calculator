@@ -159,10 +159,10 @@ class MathFunctions{
           }
         }
       }
-      numbers[0] = double.parse(numbers[0]).toString();
+        numbers[0] = double.parse(numbers[0]).toString();
     }
     catch(e){
-      result = ':(';
+      numbers[0] = ':(';
     }
     return numbers[0];
   }

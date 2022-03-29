@@ -1,7 +1,5 @@
 import 'package:calculator/pages/about.dart';
-import 'package:calculator/pages/signIn.dart';
 import 'package:calculator/pages/themes.dart';
-import 'package:calculator/services/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -18,10 +16,6 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appTheme = Provider.of<AppTheme>(context);
-    Authentication authentication = Authentication();
-    String? userName = authentication.auth.currentUser?.displayName;
-    String? userEmail = authentication.auth.currentUser?.email;
-    String? userPhoto = authentication.auth.currentUser?.photoURL;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
@@ -43,7 +37,7 @@ class SettingsPage extends StatelessWidget {
       body: Center(
         child: ListView(
           children: [
-            ListTile(
+            /*ListTile(
               title: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Text(userName!),
@@ -56,7 +50,7 @@ class SettingsPage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Image.network(userPhoto!),
               ),
-            ),
+            ),*/
             ListTile(
               title: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15),
@@ -72,23 +66,6 @@ class SettingsPage extends StatelessWidget {
               ),
               onTap: (){
                 onShare();
-              },
-            ),
-            ListTile(
-              title: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: Text('Themes'),
-              ),
-              subtitle: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: Text('Explore Different Colors!'),
-              ),
-              trailing: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: Icon(Icons.animation),
-              ),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const Themes()));
               },
             ),
             ListTile(
@@ -111,6 +88,23 @@ class SettingsPage extends StatelessWidget {
             ListTile(
               title: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15),
+                child: Text('Themes'),
+              ),
+              subtitle: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: Text('Explore Different Colors!'),
+              ),
+              trailing: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: Icon(Icons.animation),
+              ),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const Themes()));
+              },
+            ),
+            /*ListTile(
+              title: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15),
                 child: Text('Sign Out'),
               ),
               subtitle: const Padding(
@@ -126,7 +120,7 @@ class SettingsPage extends StatelessWidget {
                 Navigator.pop(context);
                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignIn()));
               },
-            ),
+            ),*/
           ],
         ),
       ),

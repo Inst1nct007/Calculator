@@ -29,7 +29,7 @@ class Themes extends StatelessWidget {
       body: Center(
         child: ListView(
           children: [
-            ListTile(
+            /*ListTile(
               title: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15),
                 child: Text('Rengoku Theme'),
@@ -44,6 +44,7 @@ class Themes extends StatelessWidget {
                 appTheme.updateButtonBackgroundGradient(Colors.deepOrangeAccent.withOpacity(0.40), Colors.red.withOpacity(0.05));
                 appTheme.updateButtonTextColor(Colors.deepOrange);
                 appTheme.updateTextColor(Colors.red);
+                appTheme.updateSupportButtonGradient(Colors.black, const Color(0xffedf2fb));
                 appTheme.updateActiveItem(1);
               },
             ),
@@ -62,6 +63,7 @@ class Themes extends StatelessWidget {
                 appTheme.updateButtonBackgroundGradient(Colors.black87.withOpacity(0.40), Colors.black54.withOpacity(0.50));
                 appTheme.updateButtonTextColor(Colors.black);
                 appTheme.updateTextColor(Colors.red);
+                appTheme.updateSupportButtonGradient(const Color(0xffabc4ff), const Color(0xffedf2fb));
                 appTheme.updateActiveItem(2);
               },
             ),
@@ -80,6 +82,7 @@ class Themes extends StatelessWidget {
                 appTheme.updateButtonBackgroundGradient(Colors.white.withOpacity(0.40), Colors.white70.withOpacity(0.10));
                 appTheme.updateButtonTextColor(Colors.pinkAccent);
                 appTheme.updateTextColor(Colors.red);
+                appTheme.updateSupportButtonGradient(const Color(0xffabc4ff), const Color(0xffedf2fb));
                 appTheme.updateActiveItem(3);
               },
             ),
@@ -98,9 +101,10 @@ class Themes extends StatelessWidget {
                 appTheme.updateButtonBackgroundGradient(Colors.white.withOpacity(0.40), Colors.white70.withOpacity(0.10));
                 appTheme.updateButtonTextColor(const Color(0xff52b69a));
                 appTheme.updateTextColor(Colors.red);
+                appTheme.updateSupportButtonGradient(const Color(0xffabc4ff), const Color(0xffedf2fb));
                 appTheme.updateActiveItem(4);
               },
-            ),
+            ),*/
             ListTile(
               title: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15),
@@ -116,6 +120,7 @@ class Themes extends StatelessWidget {
                 appTheme.updateButtonBackgroundGradient(Colors.white.withOpacity(0.40), Colors.white70.withOpacity(0.10));
                 appTheme.updateButtonTextColor(Colors.blueAccent);
                 appTheme.updateTextColor(Colors.indigoAccent);
+                appTheme.updateSupportButtonGradient(const Color(0xffabc4ff), const Color(0xffedf2fb));
                 appTheme.updateActiveItem(5);
               },
             ),
